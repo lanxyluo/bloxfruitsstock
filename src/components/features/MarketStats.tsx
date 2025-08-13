@@ -1,24 +1,18 @@
 'use client'
 
-import { TrendingUp, Package, AlertTriangle, DollarSign } from 'lucide-react'
+import { TrendingUp, Package, AlertTriangle, DollarSign, Clock } from 'lucide-react'
 import { MarketStats as MarketStatsType } from '@/types'
-import { formatNumber, formatCurrency } from '@/lib/utils'
+import { formatCurrency, calculateMarketStats } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import { allItems } from '@/data/mockFruits'
 
-const mockStats: MarketStatsType = {
-  totalFruits: 24,
-  inStock: 18,
-  outOfStock: 4,
-  lowStock: 2,
-  averagePrice: 1250000,
-  totalValue: 30000000,
-  lastUpdate: new Date().toISOString(),
-}
+// Calculate stats from mock data
+const marketStats = calculateMarketStats(allItems)
 
 const stats = [
   {
-    name: 'Total Fruits',
-    value: mockStats.totalFruits,
+    name: 'Total Items',
+    value: marketStats.totalFruits,
     icon: Package,
     color: 'text-primary',
     bgColor: 'bg-primary/10',
@@ -26,7 +20,7 @@ const stats = [
   },
   {
     name: 'In Stock',
-    value: mockStats.inStock,
+    value: marketStats.inStock,
     icon: TrendingUp,
     color: 'text-success',
     bgColor: 'bg-success/10',
@@ -34,15 +28,23 @@ const stats = [
   },
   {
     name: 'Out of Stock',
-    value: mockStats.outOfStock,
+    value: marketStats.outOfStock,
     icon: AlertTriangle,
     color: 'text-destructive',
     bgColor: 'bg-destructive/10',
     borderColor: 'border-destructive/20',
   },
   {
+    name: 'Low Stock',
+    value: marketStats.lowStock,
+    icon: Clock,
+    color: 'text-warning',
+    bgColor: 'bg-warning/10',
+    borderColor: 'border-warning/20',
+  },
+  {
     name: 'Total Value',
-    value: formatCurrency(mockStats.totalValue),
+    value: formatCurrency(marketStats.totalValue),
     icon: DollarSign,
     color: 'text-success',
     bgColor: 'bg-success/10',
@@ -52,7 +54,7 @@ const stats = [
 
 export function MarketStats() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
       {stats.map((stat) => (
         <div key={stat.name} className="card card-hover p-6 group">
           <div className="flex items-center justify-between">

@@ -2,89 +2,74 @@
 
 import { useState } from 'react'
 import { Search, Filter, RefreshCw, X } from 'lucide-react'
-import { BloxFruit } from '@/types'
+import { FruitItem, RarityLevel, StockStatus } from '@/types'
 import { StockCard } from '@/components/ui/StockCard'
 import { cn } from '@/lib/utils'
-
-const mockFruits: BloxFruit[] = [
-  {
-    id: '1',
-    name: 'dragon',
-    displayName: 'Dragon',
-    rarity: 'Mythical',
-    price: 2500000,
-    stock: 5,
-    status: 'in-stock',
-    lastUpdated: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    name: 'leopard',
-    displayName: 'Leopard',
-    rarity: 'Mythical',
-    price: 1800000,
-    stock: 0,
-    status: 'out-of-stock',
-    lastUpdated: new Date().toISOString(),
-  },
-  {
-    id: '3',
-    name: 'dough',
-    displayName: 'Dough',
-    rarity: 'Mythical',
-    price: 1200000,
-    stock: 2,
-    status: 'low-stock',
-    lastUpdated: new Date().toISOString(),
-  },
-  {
-    id: '4',
-    name: 'shadow',
-    displayName: 'Shadow',
-    rarity: 'Mythical',
-    price: 800000,
-    stock: 8,
-    status: 'in-stock',
-    lastUpdated: new Date().toISOString(),
-  },
-]
+import { allItems, getFruitsByRarity, getFruitsByStatus } from '@/data/mockFruits'
+import { filterFruits, sortFruits } from '@/lib/utils'
 
 const rarityOptions = [
   { value: 'all', label: 'All Rarities' },
-  { value: 'Common', label: 'Common' },
-  { value: 'Uncommon', label: 'Uncommon' },
-  { value: 'Rare', label: 'Rare' },
-  { value: 'Epic', label: 'Epic' },
-  { value: 'Legendary', label: 'Legendary' },
-  { value: 'Mythical', label: 'Mythical' },
+  { value: RarityLevel.COMMON, label: 'Common' },
+  { value: RarityLevel.UNCOMMON, label: 'Uncommon' },
+  { value: RarityLevel.RARE, label: 'Rare' },
+  { value: RarityLevel.EPIC, label: 'Epic' },
+  { value: RarityLevel.LEGENDARY, label: 'Legendary' },
+  { value: RarityLevel.MYTHICAL, label: 'Mythical' },
 ]
 
 const statusOptions = [
   { value: 'all', label: 'All Status' },
-  { value: 'in-stock', label: 'In Stock' },
-  { value: 'out-of-stock', label: 'Out of Stock' },
-  { value: 'low-stock', label: 'Low Stock' },
+  { value: StockStatus.IN_STOCK, label: 'In Stock' },
+  { value: StockStatus.OUT_OF_STOCK, label: 'Out of Stock' },
+  { value: StockStatus.LOW_STOCK, label: 'Low Stock' },
+  { value: StockStatus.COMING_SOON, label: 'Coming Soon' },
+]
+
+const categoryOptions = [
+  { value: 'all', label: 'All Categories' },
+  { value: 'Fruit', label: 'Fruits' },
+  { value: 'Gamepass', label: 'Gamepasses' },
+  { value: 'Limited', label: 'Limited' },
 ]
 
 export function StockOverview() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRarity, setSelectedRarity] = useState<string>('all')
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [sortBy, setSortBy] = useState<'name' | 'price' | 'stock' | 'rarity' | 'lastUpdated'>('name')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
-  const filteredFruits = mockFruits.filter((fruit) => {
-    const matchesSearch = fruit.displayName.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRarity = selectedRarity === 'all' || fruit.rarity === selectedRarity
-    const matchesStatus = selectedStatus === 'all' || fruit.status === selectedStatus
-    return matchesSearch && matchesRarity && matchesStatus
+  // Filter and sort items
+  const filteredItems = filterFruits(allItems, {
+    searchTerm,
+    rarity: selectedRarity !== 'all' ? selectedRarity as RarityLevel : undefined,
+    status: selectedStatus !== 'all' ? selectedStatus as StockStatus : undefined,
+    category: selectedCategory !== 'all' ? selectedCategory : undefined,
   })
+
+  const sortedItems = sortFruits(filteredItems, sortBy, sortDirection)
 
   const clearFilters = () => {
     setSearchTerm('')
     setSelectedRarity('all')
     setSelectedStatus('all')
+    setSelectedCategory('all')
+    setSortBy('name')
+    setSortDirection('asc')
   }
 
-  const hasActiveFilters = searchTerm || selectedRarity !== 'all' || selectedStatus !== 'all'
+  const hasActiveFilters = searchTerm || selectedRarity !== 'all' || selectedStatus !== 'all' || selectedCategory !== 'all'
+
+  const handleSort = (field: typeof sortBy) => {
+    if (sortBy === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy(field)
+      setSortDirection('asc')
+    }
+  }
 
   return (
     <div className="card p-8">
@@ -112,18 +97,30 @@ export function StockOverview() {
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search fruits..."
+            placeholder="Search items..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="input-field pl-12 w-full"
           />
         </div>
         
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="input-field"
+        >
+          {categoryOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+
         <select
           value={selectedRarity}
           onChange={(e) => setSelectedRarity(e.target.value)}
@@ -149,26 +146,51 @@ export function StockOverview() {
         </select>
       </div>
 
+      {/* Sort Options */}
+      <div className="flex items-center space-x-4 mb-6">
+        <span className="text-sm font-medium text-muted-foreground">Sort by:</span>
+        {[
+          { key: 'name' as const, label: 'Name' },
+          { key: 'price' as const, label: 'Price' },
+          { key: 'stock' as const, label: 'Stock' },
+          { key: 'rarity' as const, label: 'Rarity' },
+          { key: 'lastUpdated' as const, label: 'Updated' },
+        ].map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => handleSort(key)}
+            className={cn(
+              "px-3 py-1 rounded text-sm font-medium transition-colors duration-200",
+              sortBy === key
+                ? "bg-primary/10 text-primary border border-primary/20"
+                : "bg-background text-muted-foreground hover:text-foreground hover:bg-secondary border border-border"
+            )}
+          >
+            {label} {sortBy === key && (sortDirection === 'asc' ? '↑' : '↓')}
+          </button>
+        ))}
+      </div>
+
       {/* Results Count */}
       <div className="mb-6">
         <p className="text-muted-foreground">
-          Showing {filteredFruits.length} of {mockFruits.length} fruits
+          Showing {sortedItems.length} of {allItems.length} items
         </p>
       </div>
 
       {/* Stock Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredFruits.map((fruit) => (
-          <StockCard key={fruit.id} fruit={fruit} />
+        {sortedItems.map((item) => (
+          <StockCard key={item.id} fruit={item} />
         ))}
       </div>
 
-      {filteredFruits.length === 0 && (
+      {sortedItems.length === 0 && (
         <div className="text-center py-16">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center">
             <Search className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">No fruits found</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-2">No items found</h3>
           <p className="text-muted-foreground">Try adjusting your search criteria or filters.</p>
         </div>
       )}

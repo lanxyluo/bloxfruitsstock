@@ -178,6 +178,12 @@
     border: 1px solid rgba(245, 158, 11, 0.2) !important;
   }
   
+  .status-coming-soon {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+    color: #3b82f6 !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  }
+  
   /* Professional Rarity Badges */
   .rarity-badge {
     @apply px-2 py-1 rounded text-xs font-medium transition-colors duration-200;

@@ -27,11 +27,11 @@ export function formatCurrency(amount: number): string {
 export function getStatusColor(status: 'in-stock' | 'out-of-stock' | 'low-stock'): string {
   switch (status) {
     case 'in-stock':
-      return 'text-success'
+      return 'text-success' // #10b981 - 绿色
     case 'out-of-stock':
-      return 'text-destructive'
+      return 'text-destructive' // #ef4444 - 红色
     case 'low-stock':
-      return 'text-yellow-500'
+      return 'text-warning' // #f59e0b - 黄色
     default:
       return 'text-muted-foreground'
   }
@@ -40,12 +40,69 @@ export function getStatusColor(status: 'in-stock' | 'out-of-stock' | 'low-stock'
 export function getStatusBgColor(status: 'in-stock' | 'out-of-stock' | 'low-stock'): string {
   switch (status) {
     case 'in-stock':
-      return 'bg-success/10 border-success/20'
+      return 'status-in-stock'
     case 'out-of-stock':
-      return 'bg-destructive/10 border-destructive/20'
+      return 'status-out-of-stock'
     case 'low-stock':
-      return 'bg-yellow-500/10 border-yellow-500/20'
+      return 'status-low-stock'
     default:
       return 'bg-muted'
+  }
+}
+
+export function getRarityColor(rarity: string): string {
+  switch (rarity) {
+    case 'Common':
+      return 'text-[#64748b]' // 灰色系
+    case 'Uncommon':
+      return 'text-[#3b82f6]' // 蓝色系
+    case 'Rare':
+      return 'text-[#3b82f6]' // 蓝色系
+    case 'Epic':
+      return 'text-[#8b5cf6]' // 紫色系
+    case 'Legendary':
+      return 'text-[#f59e0b]' // 橙色系
+    case 'Mythical':
+      return 'text-[#ef4444]' // 红色系
+    default:
+      return 'text-muted-foreground'
+  }
+}
+
+export function getRarityBgColor(rarity: string): string {
+  switch (rarity) {
+    case 'Common':
+      return 'rarity-common'
+    case 'Uncommon':
+      return 'rarity-rare'
+    case 'Rare':
+      return 'rarity-rare'
+    case 'Epic':
+      return 'rarity-epic'
+    case 'Legendary':
+      return 'rarity-legendary'
+    case 'Mythical':
+      return 'rarity-mythical'
+    default:
+      return 'bg-muted'
+  }
+}
+
+export function getRarityCardClass(rarity: string): string {
+  switch (rarity) {
+    case 'Common':
+      return 'card-common'
+    case 'Uncommon':
+      return 'card-rare'
+    case 'Rare':
+      return 'card-rare'
+    case 'Epic':
+      return 'card-epic'
+    case 'Legendary':
+      return 'card-legendary'
+    case 'Mythical':
+      return 'card-mythical'
+    default:
+      return ''
   }
 }

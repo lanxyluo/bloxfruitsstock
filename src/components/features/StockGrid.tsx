@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { BloxFruit } from '@/types'
 import { StockCard } from '@/components/ui/StockCard'
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 
 const mockFruits: BloxFruit[] = [
   {
@@ -112,35 +113,43 @@ export function StockGrid() {
     }
   }
 
+  const getSortIcon = (field: 'name' | 'price' | 'stock' | 'rarity') => {
+    if (sortBy !== field) return <ArrowUpDown className="w-4 h-4" />
+    return sortOrder === 'asc' ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+  }
+
   return (
-    <div className="card p-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-        <h2 className="text-2xl font-bold text-foreground">All Fruits</h2>
+    <div className="card p-8">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+        <div>
+          <h2 className="text-3xl font-bold text-foreground mb-2">All Fruits</h2>
+          <p className="text-muted-foreground">Browse and sort through all available Blox Fruits</p>
+        </div>
         
-        <div className="flex items-center space-x-2">
-          <span className="text-muted-foreground text-sm">Sort by:</span>
-          <select
-            value={`${sortBy}-${sortOrder}`}
-            onChange={(e) => {
-              const [field, order] = e.target.value.split('-') as [typeof sortBy, typeof sortOrder]
-              setSortBy(field)
-              setSortOrder(order)
-            }}
-            className="input-field text-sm"
-          >
-            <option value="name-asc">Name (A-Z)</option>
-            <option value="name-desc">Name (Z-A)</option>
-            <option value="price-asc">Price (Low-High)</option>
-            <option value="price-desc">Price (High-Low)</option>
-            <option value="stock-asc">Stock (Low-High)</option>
-            <option value="stock-desc">Stock (High-Low)</option>
-            <option value="rarity-asc">Rarity (Low-High)</option>
-            <option value="rarity-desc">Rarity (High-Low)</option>
-          </select>
+        <div className="flex items-center space-x-4">
+          <span className="text-muted-foreground text-sm font-medium">Sort by:</span>
+          <div className="flex items-center space-x-2">
+            {(['name', 'price', 'stock', 'rarity'] as const).map((field) => (
+              <button
+                key={field}
+                onClick={() => handleSort(field)}
+                className={`
+                  flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                  ${sortBy === field 
+                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white border border-blue-500/30 shadow-lg' 
+                    : 'bg-background/50 text-muted-foreground hover:text-white hover:bg-white/10 border border-border/40'
+                  }
+                `}
+              >
+                <span className="capitalize">{field}</span>
+                {getSortIcon(field)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {sortedFruits.map((fruit) => (
           <StockCard key={fruit.id} fruit={fruit} />
         ))}

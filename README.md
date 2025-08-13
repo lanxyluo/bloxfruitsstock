@@ -1,96 +1,73 @@
 # Blox Fruits Stock Monitor
 
-A modern Next.js application for monitoring Blox Fruits stock availability and market trends.
+A modern, real-time stock monitoring platform for Blox Fruits with a sleek dark gaming UI design.
 
-## Features
+## 🎨 Design Features
 
-- 🎯 Real-time stock monitoring
-- 📊 Market statistics and analytics
-- 🔍 Advanced search and filtering
-- 📱 Responsive design
-- 🌙 Dark theme
-- ⚡ Fast and modern UI
+### Modern Dark Gaming UI
+- **Deep Blue-Gray Background**: `#1a1b23` for the main background
+- **Card Background**: `#2a2d3a` for elevated surfaces
+- **High Contrast Text**: `#e2e8f0` for excellent readability
+- **Glass Effects**: Backdrop blur and transparency for modern feel
 
-## Tech Stack
+### Rarity Color System
+- **Common**: Gray (`#64748b`)
+- **Rare**: Blue (`#3b82f6`)
+- **Epic**: Purple (`#8b5cf6`)
+- **Legendary**: Orange (`#f59e0b`)
+- **Mythical**: Red (`#ef4444`)
 
-- **Framework**: Next.js 14 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
-- **UI Components**: Custom components with modern design
+### Stock Status Colors
+- **In Stock**: Green (`#10b981`)
+- **Out of Stock**: Red (`#ef4444`)
+- **Low Stock**: Yellow (`#f59e0b`)
 
-## Getting Started
+### Modern Card Effects
+- **Hover Animations**: Scale and shadow effects
+- **Rarity Borders**: Left border highlighting based on rarity
+- **Glass Morphism**: Backdrop blur and transparency
+- **Smooth Transitions**: 300ms ease-out animations
 
-### Prerequisites
+## 🚀 Getting Started
 
-- Node.js 18+ 
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd bloxfruits-stock
-```
-
-2. Install dependencies:
+1. Install dependencies:
 ```bash
 npm install
-# or
-yarn install
 ```
 
-3. Run the development server:
+2. Run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Project Structure
+## 🛠️ Built With
 
-```
-src/
-├── app/                 # Next.js App Router pages
-│   ├── globals.css     # Global styles
-│   ├── layout.tsx      # Root layout
-│   └── page.tsx        # Home page
-├── components/         # React components
-│   ├── ui/            # Base UI components
-│   ├── layout/        # Layout components
-│   └── features/      # Feature components
-├── lib/               # Utility functions
-├── types/             # TypeScript type definitions
-└── data/              # Static data and mock data
-```
+- **Next.js 14** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Lucide React** - Icons
+- **Modern CSS** - Glass effects and animations
 
-## Color Theme
+## 📱 Features
 
-The application uses a dark theme inspired by modern trading platforms:
+- **Real-time Stock Monitoring**: Track Blox Fruits availability
+- **Advanced Filtering**: Search by name, rarity, and status
+- **Market Statistics**: Overview of market trends
+- **Responsive Design**: Works on all devices
+- **Modern UI/UX**: Inspired by gaming interfaces
 
-- **Background**: `#1a1b23` (Deep blue-gray)
-- **Secondary Background**: `#2a2d3a` (Lighter dark)
-- **Primary**: `#3b82f6` (Blue)
-- **Success**: `#10b981` (Green)
-- **Danger**: `#ef4444` (Red)
+## 🎯 Design Philosophy
 
-## Available Scripts
+This project features a modern dark gaming UI inspired by popular gaming platforms like bloxfruitsvalues.com. The design emphasizes:
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+- **High Contrast**: Excellent readability in dark environments
+- **Visual Hierarchy**: Clear information organization
+- **Interactive Elements**: Smooth hover effects and transitions
+- **Gaming Aesthetics**: Color-coded rarity system and modern card design
+- **Accessibility**: Proper contrast ratios and semantic HTML
 
-## Contributing
+## 📄 License
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
+This project is not affiliated with Roblox Corporation.

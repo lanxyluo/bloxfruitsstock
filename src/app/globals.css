@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
@@ -30,29 +30,43 @@
   }
 
   .dark {
-    /* Dark theme variables - Blox Fruits inspired colors */
-    --background: 26 27 35;
-    --foreground: 255 255 255;
-    --card: 42 45 58;
+    /* Enhanced Modern Dark Gaming UI - More Vibrant Colors */
+    --background: 15 17 25; /* #0f1119 - 更深的背景 */
+    --foreground: 255 255 255; /* #ffffff - 纯白色文字 */
+    --card: 25 28 40; /* #191c28 - 更深的卡片背景 */
     --card-foreground: 255 255 255;
-    --popover: 42 45 58;
+    --popover: 25 28 40;
     --popover-foreground: 255 255 255;
-    --primary: 59 130 246;
+    --primary: 59 130 246; /* #3b82f6 - 保持蓝色主色调 */
     --primary-foreground: 255 255 255;
-    --secondary: 58 61 74;
+    --secondary: 35 38 50; /* #232632 - 更深的次要背景 */
     --secondary-foreground: 255 255 255;
-    --muted: 58 61 74;
-    --muted-foreground: 156 163 175;
-    --accent: 58 61 74;
+    --muted: 35 38 50;
+    --muted-foreground: 156 163 175; /* #9ca3af - 柔和灰色 */
+    --accent: 35 38 50;
     --accent-foreground: 255 255 255;
-    --destructive: 239 68 68;
+    --destructive: 239 68 68; /* #ef4444 - 红色 */
     --destructive-foreground: 255 255 255;
-    --success: 16 185 129;
+    --success: 16 185 129; /* #10b981 - 绿色 */
     --success-foreground: 255 255 255;
-    --border: 58 61 74;
-    --input: 58 61 74;
+    --warning: 245 158 11; /* #f59e0b - 黄色 */
+    --warning-foreground: 255 255 255;
+    --border: 45 48 60; /* #2d303c - 更深的边框 */
+    --input: 45 48 60;
     --ring: 59 130 246;
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* 12px 圆角 */
+    
+    /* Enhanced Rarity Colors - More Vibrant */
+    --rarity-common: 100 116 139; /* #64748b - 灰色系 */
+    --rarity-rare: 59 130 246; /* #3b82f6 - 蓝色系 */
+    --rarity-epic: 139 92 246; /* #8b5cf6 - 紫色系 */
+    --rarity-legendary: 245 158 11; /* #f59e0b - 橙色系 */
+    --rarity-mythical: 239 68 68; /* #ef4444 - 红色系 */
+    
+    /* Enhanced Stock Status Colors */
+    --stock-in: 16 185 129; /* #10b981 - 有库存绿色 */
+    --stock-out: 239 68 68; /* #ef4444 - 缺货红色 */
+    --stock-low: 245 158 11; /* #f59e0b - 库存不足黄色 */
   }
 
   * {
@@ -62,6 +76,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(15 17 25 / 0.95) 100%);
+    min-height: 100vh;
   }
 
   html {
@@ -87,24 +103,146 @@
 }
 
 @layer components {
+  /* Enhanced Modern Card Component */
   .card {
-    @apply bg-card text-card-foreground rounded-lg border shadow-sm;
+    @apply bg-card text-card-foreground rounded-xl border border-border/50 shadow-lg backdrop-blur-sm;
+    background: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(25 28 40 / 0.9) 100%);
+    box-shadow: 
+      0 8px 32px -8px hsl(0 0 0 / 0.3),
+      0 4px 16px -4px hsl(0 0 0 / 0.2),
+      inset 0 1px 0 hsl(255 255 255 / 0.1);
   }
   
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .card-hover:hover {
+    @apply transform scale-[1.03] shadow-2xl;
+    box-shadow: 
+      0 25px 50px -12px hsl(0 0 0 / 0.4),
+      0 12px 24px -6px hsl(0 0 0 / 0.3),
+      0 0 0 1px hsl(255 255 255 / 0.15),
+      inset 0 1px 0 hsl(255 255 255 / 0.15);
+  }
+  
+  /* Enhanced Rarity Card Variants with Glow Effects */
+  .card-common {
+    @apply border-l-4 border-l-[#64748b] shadow-[#64748b]/20;
+    box-shadow: 
+      0 8px 32px -8px hsl(0 0 0 / 0.3),
+      0 4px 16px -4px hsl(0 0 0 / 0.2),
+      0 0 0 1px hsl(100 116 139 / 0.2),
+      inset 0 1px 0 hsl(255 255 255 / 0.1);
+  }
+  
+  .card-rare {
+    @apply border-l-4 border-l-[#3b82f6] shadow-[#3b82f6]/20;
+    box-shadow: 
+      0 8px 32px -8px hsl(0 0 0 / 0.3),
+      0 4px 16px -4px hsl(0 0 0 / 0.2),
+      0 0 0 1px hsl(59 130 246 / 0.2),
+      inset 0 1px 0 hsl(255 255 255 / 0.1);
+  }
+  
+  .card-epic {
+    @apply border-l-4 border-l-[#8b5cf6] shadow-[#8b5cf6]/20;
+    box-shadow: 
+      0 8px 32px -8px hsl(0 0 0 / 0.3),
+      0 4px 16px -4px hsl(0 0 0 / 0.2),
+      0 0 0 1px hsl(139 92 246 / 0.2),
+      inset 0 1px 0 hsl(255 255 255 / 0.1);
+  }
+  
+  .card-legendary {
+    @apply border-l-4 border-l-[#f59e0b] shadow-[#f59e0b]/20;
+    box-shadow: 
+      0 8px 32px -8px hsl(0 0 0 / 0.3),
+      0 4px 16px -4px hsl(0 0 0 / 0.2),
+      0 0 0 1px hsl(245 158 11 / 0.2),
+      inset 0 1px 0 hsl(255 255 255 / 0.1);
+  }
+  
+  .card-mythical {
+    @apply border-l-4 border-l-[#ef4444] shadow-[#ef4444]/20;
+    box-shadow: 
+      0 8px 32px -8px hsl(0 0 0 / 0.3),
+      0 4px 16px -4px hsl(0 0 0 / 0.2),
+      0 0 0 1px hsl(239 68 68 / 0.2),
+      inset 0 1px 0 hsl(255 255 255 / 0.1);
+  }
+  
+  /* Enhanced Button Components */
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl;
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(59 130 246 / 0.9) 100%);
+    box-shadow: 0 4px 16px -4px hsl(59 130 246 / 0.3);
   }
   
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl;
   }
   
+  /* Enhanced Input Field */
   .input-field {
-    @apply bg-background border border-input text-foreground placeholder-muted-foreground rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors duration-200;
+    @apply bg-background/50 border border-input text-foreground placeholder-muted-foreground rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 backdrop-blur-sm;
+    background: linear-gradient(145deg, hsl(var(--background) / 0.6) 0%, hsl(15 17 25 / 0.4) 100%);
   }
 
+  /* Enhanced Glass Effect */
   .glass-effect {
-    @apply backdrop-blur-sm bg-card/50 border border-border/50;
+    @apply backdrop-blur-md bg-card/40 border border-border/40 rounded-xl;
+    background: linear-gradient(145deg, hsl(var(--card) / 0.4) 0%, hsl(25 28 40 / 0.3) 100%);
+  }
+  
+  /* Enhanced Status Badges */
+  .status-badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200;
+  }
+  
+  .status-in-stock {
+    @apply bg-success/30 text-success border border-success/40;
+    box-shadow: 0 2px 8px -2px hsl(16 185 129 / 0.3);
+  }
+  
+  .status-out-of-stock {
+    @apply bg-destructive/30 text-destructive border border-destructive/40;
+    box-shadow: 0 2px 8px -2px hsl(239 68 68 / 0.3);
+  }
+  
+  .status-low-stock {
+    @apply bg-warning/30 text-warning border border-warning/40;
+    box-shadow: 0 2px 8px -2px hsl(245 158 11 / 0.3);
+  }
+  
+  /* Enhanced Rarity Badges */
+  .rarity-badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200;
+  }
+  
+  .rarity-common {
+    @apply bg-[#64748b]/30 text-[#64748b] border border-[#64748b]/40;
+    box-shadow: 0 2px 8px -2px hsl(100 116 139 / 0.3);
+  }
+  
+  .rarity-rare {
+    @apply bg-[#3b82f6]/30 text-[#3b82f6] border border-[#3b82f6]/40;
+    box-shadow: 0 2px 8px -2px hsl(59 130 246 / 0.3);
+  }
+  
+  .rarity-epic {
+    @apply bg-[#8b5cf6]/30 text-[#8b5cf6] border border-[#8b5cf6]/40;
+    box-shadow: 0 2px 8px -2px hsl(139 92 246 / 0.3);
+  }
+  
+  .rarity-legendary {
+    @apply bg-[#f59e0b]/30 text-[#f59e0b] border border-[#f59e0b]/40;
+    box-shadow: 0 2px 8px -2px hsl(245 158 11 / 0.3);
+  }
+  
+  .rarity-mythical {
+    @apply bg-[#ef4444]/30 text-[#ef4444] border border-[#ef4444]/40;
+    box-shadow: 0 2px 8px -2px hsl(239 68 68 / 0.3);
   }
 }
 
@@ -115,6 +253,27 @@
   
   .text-balance {
     text-wrap: balance;
+  }
+  
+  /* Enhanced Glow Effects */
+  .glow-common {
+    box-shadow: 0 0 30px hsl(100 116 139 / 0.4);
+  }
+  
+  .glow-rare {
+    box-shadow: 0 0 30px hsl(59 130 246 / 0.4);
+  }
+  
+  .glow-epic {
+    box-shadow: 0 0 30px hsl(139 92 246 / 0.4);
+  }
+  
+  .glow-legendary {
+    box-shadow: 0 0 30px hsl(245 158 11 / 0.4);
+  }
+  
+  .glow-mythical {
+    box-shadow: 0 0 30px hsl(239 68 68 / 0.4);
   }
 }
 

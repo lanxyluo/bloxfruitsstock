@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 @layer base {
   :root {
     /* Light theme variables (not used but defined for completeness) */
@@ -55,18 +53,6 @@
     --input: 45 55 72;
     --ring: 59 130 246;
     --radius: 0.5rem; /* 8px 圆角 */
-    
-    /* Professional Rarity Colors */
-    --rarity-common: 100 116 139; /* #64748b - 中性灰 */
-    --rarity-rare: 59 130 246; /* #3b82f6 - 现代蓝 */
-    --rarity-epic: 139 92 246; /* #8b5cf6 - 现代紫 */
-    --rarity-legendary: 245 158 11; /* #f59e0b - 现代橙 */
-    --rarity-mythical: 239 68 68; /* #ef4444 - 现代红 */
-    
-    /* Professional Stock Status Colors */
-    --stock-in: 34 197 94; /* #22c55e - 现代绿色 */
-    --stock-out: 239 68 68; /* #ef4444 - 红色 */
-    --stock-low: 245 158 11; /* #f59e0b - 橙色 */
   }
 
   * {
@@ -76,7 +62,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
-    background: hsl(var(--background));
+    background-color: #0f1419 !important;
     min-height: 100vh;
   }
 
@@ -90,15 +76,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-background;
+    background-color: #0f1419;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted rounded-full;
+    background-color: #2d3748;
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/50;
+    background-color: #4a5568;
   }
 }
 
@@ -106,9 +93,9 @@
   /* Professional Modern Card Component */
   .card {
     @apply bg-card text-card-foreground rounded-lg border shadow-sm;
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    box-shadow: 0 1px 3px 0 hsl(0 0 0 / 0.1), 0 1px 2px -1px hsl(0 0 0 / 0.1);
+    background-color: #1e2328 !important;
+    border: 1px solid #2d3748 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
   }
   
   .card-hover {
@@ -117,54 +104,55 @@
   
   .card-hover:hover {
     @apply transform scale-[1.01];
-    border-color: hsl(var(--primary) / 0.3);
-    background: hsl(var(--card) / 0.95);
-    box-shadow: 0 4px 6px -1px hsl(0 0 0 / 0.1), 0 2px 4px -1px hsl(0 0 0 / 0.06);
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    background-color: rgba(30, 35, 40, 0.95) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
   
   /* Professional Rarity Card Variants */
   .card-common {
-    border-left: 3px solid hsl(var(--rarity-common));
+    border-left: 3px solid #64748b !important;
   }
   
   .card-rare {
-    border-left: 3px solid hsl(var(--rarity-rare));
+    border-left: 3px solid #3b82f6 !important;
   }
   
   .card-epic {
-    border-left: 3px solid hsl(var(--rarity-epic));
+    border-left: 3px solid #8b5cf6 !important;
   }
   
   .card-legendary {
-    border-left: 3px solid hsl(var(--rarity-legendary));
+    border-left: 3px solid #f59e0b !important;
   }
   
   .card-mythical {
-    border-left: 3px solid hsl(var(--rarity-mythical));
+    border-left: 3px solid #ef4444 !important;
   }
   
   /* Professional Button Components */
   .btn-primary {
     @apply bg-primary text-primary-foreground hover:bg-primary/90 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
-    background: hsl(var(--primary));
+    background-color: #3b82f6 !important;
   }
   
   .btn-secondary {
     @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    background-color: #252a31 !important;
   }
   
   /* Professional Input Field */
   .input-field {
     @apply bg-background border border-input text-foreground placeholder-muted-foreground rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors duration-200;
-    background: hsl(var(--background));
-    border: 1px solid hsl(var(--border));
+    background-color: #0f1419 !important;
+    border: 1px solid #2d3748 !important;
   }
 
   /* Professional Glass Effect */
   .glass-effect {
     @apply backdrop-blur-sm bg-card/50 border border-border/50 rounded-lg;
-    background: hsl(var(--card) / 0.5);
-    border: 1px solid hsl(var(--border) / 0.5);
+    background-color: rgba(30, 35, 40, 0.5) !important;
+    border: 1px solid rgba(45, 55, 72, 0.5) !important;
   }
   
   /* Professional Status Badges */
@@ -173,15 +161,21 @@
   }
   
   .status-in-stock {
-    @apply bg-success/10 text-success border border-success/20;
+    background-color: rgba(34, 197, 94, 0.1) !important;
+    color: #22c55e !important;
+    border: 1px solid rgba(34, 197, 94, 0.2) !important;
   }
   
   .status-out-of-stock {
-    @apply bg-destructive/10 text-destructive border border-destructive/20;
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
   }
   
   .status-low-stock {
-    @apply bg-warning/10 text-warning border border-warning/20;
+    background-color: rgba(245, 158, 11, 0.1) !important;
+    color: #f59e0b !important;
+    border: 1px solid rgba(245, 158, 11, 0.2) !important;
   }
   
   /* Professional Rarity Badges */
@@ -190,23 +184,33 @@
   }
   
   .rarity-common {
-    @apply bg-[#64748b]/10 text-[#64748b] border border-[#64748b]/20;
+    background-color: rgba(100, 116, 139, 0.1) !important;
+    color: #64748b !important;
+    border: 1px solid rgba(100, 116, 139, 0.2) !important;
   }
   
   .rarity-rare {
-    @apply bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/20;
+    background-color: rgba(59, 130, 246, 0.1) !important;
+    color: #3b82f6 !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
   }
   
   .rarity-epic {
-    @apply bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/20;
+    background-color: rgba(139, 92, 246, 0.1) !important;
+    color: #8b5cf6 !important;
+    border: 1px solid rgba(139, 92, 246, 0.2) !important;
   }
   
   .rarity-legendary {
-    @apply bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/20;
+    background-color: rgba(245, 158, 11, 0.1) !important;
+    color: #f59e0b !important;
+    border: 1px solid rgba(245, 158, 11, 0.2) !important;
   }
   
   .rarity-mythical {
-    @apply bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/20;
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
   }
 }
 

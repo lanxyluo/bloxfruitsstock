@@ -53,17 +53,17 @@ export function getStatusBgColor(status: 'in-stock' | 'out-of-stock' | 'low-stoc
 export function getRarityColor(rarity: string): string {
   switch (rarity) {
     case 'Common':
-      return 'text-[#64748b]' // 中性灰
+      return 'text-muted-foreground' // 中性灰
     case 'Uncommon':
-      return 'text-[#3b82f6]' // 现代蓝
+      return 'text-primary' // 现代蓝
     case 'Rare':
-      return 'text-[#3b82f6]' // 现代蓝
+      return 'text-primary' // 现代蓝
     case 'Epic':
-      return 'text-[#8b5cf6]' // 现代紫
+      return 'text-purple-500' // 现代紫
     case 'Legendary':
-      return 'text-[#f59e0b]' // 现代橙
+      return 'text-warning' // 现代橙
     case 'Mythical':
-      return 'text-[#ef4444]' // 现代红
+      return 'text-destructive' // 现代红
     default:
       return 'text-muted-foreground'
   }

@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Filter, RefreshCw, X } from 'lucide-react'
+import { Search, Filter, RefreshCw, X, ArrowRight } from 'lucide-react'
 import { FruitItem, RarityLevel, StockStatus } from '@/types'
 import { StockCard } from '@/components/ui/StockCard'
 import { cn } from '@/lib/utils'
 import { allItems, getFruitsByRarity, getFruitsByStatus } from '@/data/mockFruits'
 import { filterFruits, sortFruits } from '@/lib/utils'
+import Link from 'next/link'
 
 const rarityOptions = [
   { value: 'all', label: 'All Rarities' },
@@ -33,7 +34,12 @@ const categoryOptions = [
   { value: 'Limited', label: 'Limited' },
 ]
 
-export function StockOverview() {
+interface StockOverviewProps {
+  maxItems?: number
+  showViewAll?: boolean
+}
+
+export function StockOverview({ maxItems, showViewAll = true }: StockOverviewProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRarity, setSelectedRarity] = useState<string>('all')
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
@@ -50,6 +56,9 @@ export function StockOverview() {
   })
 
   const sortedItems = sortFruits(filteredItems, sortBy, sortDirection)
+  
+  // Limit items if maxItems is specified
+  const displayItems = maxItems ? sortedItems.slice(0, maxItems) : sortedItems
 
   const clearFilters = () => {
     setSearchTerm('')
@@ -72,119 +81,114 @@ export function StockOverview() {
   }
 
   return (
-    <div className="card p-8">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground mb-2">Stock Overview</h2>
-          <p className="text-muted-foreground">Search and filter through available Blox Fruits</p>
-        </div>
-        
-        <div className="flex items-center space-x-4">
-          {hasActiveFilters && (
-            <button 
-              onClick={clearFilters}
-              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium bg-background text-muted-foreground hover:text-foreground hover:bg-secondary border border-border transition-colors duration-200"
+    <div>
+      {/* Filters - Only show if not limited view */}
+      {!maxItems && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search items..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="input-field pl-12 w-full"
+              />
+            </div>
+            
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="input-field"
             >
-              <X className="w-4 h-4" />
-              <span>Clear Filters</span>
-            </button>
-          )}
-          <button className="btn-secondary flex items-center space-x-2">
-            <RefreshCw className="w-4 h-4" />
-            <span>Refresh</span>
-          </button>
-        </div>
-      </div>
+              {categoryOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
 
-      {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search items..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="input-field pl-12 w-full"
-          />
-        </div>
-        
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="input-field"
-        >
-          {categoryOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+            <select
+              value={selectedRarity}
+              onChange={(e) => setSelectedRarity(e.target.value)}
+              className="input-field"
+            >
+              {rarityOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="input-field"
+            >
+              {statusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <select
-          value={selectedRarity}
-          onChange={(e) => setSelectedRarity(e.target.value)}
-          className="input-field"
-        >
-          {rarityOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        
-        <select
-          value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)}
-          className="input-field"
-        >
-          {statusOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+          {/* Sort Options */}
+          <div className="flex items-center space-x-4 mb-6">
+            <span className="text-sm font-medium text-muted-foreground">Sort by:</span>
+            {[
+              { key: 'name' as const, label: 'Name' },
+              { key: 'price' as const, label: 'Price' },
+              { key: 'stock' as const, label: 'Stock' },
+              { key: 'rarity' as const, label: 'Rarity' },
+              { key: 'lastUpdated' as const, label: 'Updated' },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => handleSort(key)}
+                className={cn(
+                  "px-3 py-1 rounded text-sm font-medium transition-colors duration-200",
+                  sortBy === key
+                    ? "bg-primary/10 text-primary border border-primary/20"
+                    : "bg-background text-muted-foreground hover:text-foreground hover:bg-secondary border border-border"
+                )}
+              >
+                {label} {sortBy === key && (sortDirection === 'asc' ? '↑' : '↓')}
+              </button>
+            ))}
+          </div>
 
-      {/* Sort Options */}
-      <div className="flex items-center space-x-4 mb-6">
-        <span className="text-sm font-medium text-muted-foreground">Sort by:</span>
-        {[
-          { key: 'name' as const, label: 'Name' },
-          { key: 'price' as const, label: 'Price' },
-          { key: 'stock' as const, label: 'Stock' },
-          { key: 'rarity' as const, label: 'Rarity' },
-          { key: 'lastUpdated' as const, label: 'Updated' },
-        ].map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => handleSort(key)}
-            className={cn(
-              "px-3 py-1 rounded text-sm font-medium transition-colors duration-200",
-              sortBy === key
-                ? "bg-primary/10 text-primary border border-primary/20"
-                : "bg-background text-muted-foreground hover:text-foreground hover:bg-secondary border border-border"
-            )}
-          >
-            {label} {sortBy === key && (sortDirection === 'asc' ? '↑' : '↓')}
-          </button>
-        ))}
-      </div>
-
-      {/* Results Count */}
-      <div className="mb-6">
-        <p className="text-muted-foreground">
-          Showing {sortedItems.length} of {allItems.length} items
-        </p>
-      </div>
+          {/* Results Count */}
+          <div className="mb-6">
+            <p className="text-muted-foreground">
+              Showing {sortedItems.length} of {allItems.length} items
+            </p>
+          </div>
+        </>
+      )}
 
       {/* Stock Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {sortedItems.map((item) => (
+        {displayItems.map((item) => (
           <StockCard key={item.id} fruit={item} />
         ))}
       </div>
 
+      {/* View All Button for limited view */}
+      {maxItems && showViewAll && sortedItems.length > maxItems && (
+        <div className="text-center mt-8">
+          <Link 
+            href="/stock-overview" 
+            className="inline-flex items-center space-x-2 px-6 py-3 bg-primary/10 text-primary border border-primary/20 rounded-lg hover:bg-primary/20 transition-colors duration-200"
+          >
+            <span>View All {sortedItems.length} Items</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
+
+      {/* No Results Message */}
       {sortedItems.length === 0 && (
         <div className="text-center py-16">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center">

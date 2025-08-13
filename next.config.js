@@ -1,11 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   images: {
     domains: ['images.unsplash.com'],
   },
+  optimizeFonts: true,
 }
 
 module.exports = nextConfig

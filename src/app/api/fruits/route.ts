@@ -3,7 +3,9 @@ import { allItems, mockFruits, mockGamepasses, mockLimited } from '@/data/mockFr
 import { filterFruits, sortFruits } from '@/lib/utils'
 import { FruitsResponse, RarityLevel, StockStatus } from '@/types'
 
-// GET /api/fruits - Get all fruits data
+
+
+// GET /api/fruits - Get fruits data with filtering, sorting, and pagination
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -18,12 +20,17 @@ export async function GET(request: NextRequest) {
 
     let filteredItems = [...allItems]
 
+    // Handle category-specific requests
+    if (category === 'fruits') {
+      filteredItems = mockFruits
+    } else if (category === 'gamepasses') {
+      filteredItems = mockGamepasses
+    } else if (category === 'limited') {
+      filteredItems = mockLimited
+    }
+
     // Apply filters
     const filters: any = {}
-    
-    if (category) {
-      filters.category = category
-    }
     
     if (rarity && Object.values(RarityLevel).includes(rarity as RarityLevel)) {
       filters.rarity = rarity as RarityLevel
@@ -70,45 +77,4 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(errorResponse, { status: 500 })
   }
-}
-
-// GET /api/fruits/categories - Get fruits by category
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
-  const category = searchParams.get('category')
-
-  if (category === 'fruits') {
-    return NextResponse.json({
-      success: true,
-      data: mockFruits,
-      message: 'Fruits data retrieved successfully',
-      timestamp: new Date().toISOString()
-    })
-  }
-
-  if (category === 'gamepasses') {
-    return NextResponse.json({
-      success: true,
-      data: mockGamepasses,
-      message: 'Gamepasses data retrieved successfully',
-      timestamp: new Date().toISOString()
-    })
-  }
-
-  if (category === 'limited') {
-    return NextResponse.json({
-      success: true,
-      data: mockLimited,
-      message: 'Limited items data retrieved successfully',
-      timestamp: new Date().toISOString()
-    })
-  }
-
-  // Default: return all items
-  return NextResponse.json({
-    success: true,
-    data: allItems,
-    message: 'All items data retrieved successfully',
-    timestamp: new Date().toISOString()
-  })
 }

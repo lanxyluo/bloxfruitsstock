@@ -1,32 +1,33 @@
 # Blox Fruits Stock Monitor
 
-A modern, real-time stock monitoring platform for Blox Fruits with a sleek dark gaming UI design.
+A professional, real-time stock monitoring platform for Blox Fruits with a modern dark gaming UI design inspired by VS Code and professional applications.
 
-## 🎨 Design Features
+## 🎨 Professional Design Features
 
 ### Modern Dark Gaming UI
-- **Deep Blue-Gray Background**: `#1a1b23` for the main background
-- **Card Background**: `#2a2d3a` for elevated surfaces
-- **High Contrast Text**: `#e2e8f0` for excellent readability
-- **Glass Effects**: Backdrop blur and transparency for modern feel
+- **Deep Background**: `#0f1419` (VS Code-style deep blue-black)
+- **Card Background**: `#1e2328` (Professional dark gray-blue)
+- **Secondary Background**: `#252a31` (Slightly lighter dark)
+- **Pure White Text**: `#ffffff` (Maximum contrast)
+- **Secondary Text**: `#a8b3cf` (Soft blue-gray)
 
-### Rarity Color System
-- **Common**: Gray (`#64748b`)
-- **Rare**: Blue (`#3b82f6`)
-- **Epic**: Purple (`#8b5cf6`)
-- **Legendary**: Orange (`#f59e0b`)
-- **Mythical**: Red (`#ef4444`)
+### Professional Rarity Color System
+- **Common**: Neutral Gray (`#64748b`)
+- **Rare**: Modern Blue (`#3b82f6`)
+- **Epic**: Modern Purple (`#8b5cf6`)
+- **Legendary**: Modern Orange (`#f59e0b`)
+- **Mythical**: Modern Red (`#ef4444`)
 
-### Stock Status Colors
-- **In Stock**: Green (`#10b981`)
+### Professional Stock Status Colors
+- **In Stock**: Modern Green (`#22c55e`)
 - **Out of Stock**: Red (`#ef4444`)
-- **Low Stock**: Yellow (`#f59e0b`)
+- **Low Stock**: Orange (`#f59e0b`)
 
-### Modern Card Effects
-- **Hover Animations**: Scale and shadow effects
-- **Rarity Borders**: Left border highlighting based on rarity
-- **Glass Morphism**: Backdrop blur and transparency
-- **Smooth Transitions**: 300ms ease-out animations
+### Modern Card Design
+- **Clean Borders**: Subtle borders with modern colors
+- **Hover Effects**: Border highlight + background brightening
+- **Rounded Corners**: 8px for modern feel
+- **Subtle Shadows**: Professional depth without overwhelming effects
 
 ## 🚀 Getting Started
 
@@ -46,27 +47,28 @@ npm run dev
 
 - **Next.js 14** - React framework
 - **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Lucide React** - Icons
-- **Modern CSS** - Glass effects and animations
+- **Tailwind CSS** - Professional styling
+- **Lucide React** - Clean icons
+- **Modern CSS** - Professional effects and animations
 
 ## 📱 Features
 
 - **Real-time Stock Monitoring**: Track Blox Fruits availability
 - **Advanced Filtering**: Search by name, rarity, and status
-- **Market Statistics**: Overview of market trends
+- **Market Statistics**: Professional overview of market trends
 - **Responsive Design**: Works on all devices
-- **Modern UI/UX**: Inspired by gaming interfaces
+- **Professional UI/UX**: Inspired by modern applications
 
 ## 🎯 Design Philosophy
 
-This project features a modern dark gaming UI inspired by popular gaming platforms like bloxfruitsvalues.com. The design emphasizes:
+This project features a professional modern dark gaming UI inspired by VS Code and professional applications. The design emphasizes:
 
-- **High Contrast**: Excellent readability in dark environments
-- **Visual Hierarchy**: Clear information organization
-- **Interactive Elements**: Smooth hover effects and transitions
-- **Gaming Aesthetics**: Color-coded rarity system and modern card design
+- **Maximum Contrast**: Pure white text on deep backgrounds for excellent readability
+- **Professional Colors**: Modern, clean color palette without overwhelming effects
+- **Clean Interactions**: Subtle hover effects and smooth transitions
+- **Gaming Aesthetics**: Color-coded rarity system with professional presentation
 - **Accessibility**: Proper contrast ratios and semantic HTML
+- **Modern Feel**: 8px border radius and clean typography
 
 ## 📄 License
 

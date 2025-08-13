@@ -134,10 +134,10 @@ export function StockGrid() {
                 key={field}
                 onClick={() => handleSort(field)}
                 className={`
-                  flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                  flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200
                   ${sortBy === field 
-                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white border border-blue-500/30 shadow-lg' 
-                    : 'bg-background/50 text-muted-foreground hover:text-white hover:bg-white/10 border border-border/40'
+                    ? 'bg-primary/10 text-primary border border-primary/20' 
+                    : 'bg-background text-muted-foreground hover:text-foreground hover:bg-secondary border border-border'
                   }
                 `}
               >

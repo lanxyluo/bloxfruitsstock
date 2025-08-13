@@ -27,11 +27,11 @@ export function formatCurrency(amount: number): string {
 export function getStatusColor(status: 'in-stock' | 'out-of-stock' | 'low-stock'): string {
   switch (status) {
     case 'in-stock':
-      return 'text-success' // #10b981 - 绿色
+      return 'text-success' // #22c55e - 现代绿色
     case 'out-of-stock':
       return 'text-destructive' // #ef4444 - 红色
     case 'low-stock':
-      return 'text-warning' // #f59e0b - 黄色
+      return 'text-warning' // #f59e0b - 橙色
     default:
       return 'text-muted-foreground'
   }
@@ -53,17 +53,17 @@ export function getStatusBgColor(status: 'in-stock' | 'out-of-stock' | 'low-stoc
 export function getRarityColor(rarity: string): string {
   switch (rarity) {
     case 'Common':
-      return 'text-[#64748b]' // 灰色系
+      return 'text-[#64748b]' // 中性灰
     case 'Uncommon':
-      return 'text-[#3b82f6]' // 蓝色系
+      return 'text-[#3b82f6]' // 现代蓝
     case 'Rare':
-      return 'text-[#3b82f6]' // 蓝色系
+      return 'text-[#3b82f6]' // 现代蓝
     case 'Epic':
-      return 'text-[#8b5cf6]' // 紫色系
+      return 'text-[#8b5cf6]' // 现代紫
     case 'Legendary':
-      return 'text-[#f59e0b]' // 橙色系
+      return 'text-[#f59e0b]' // 现代橙
     case 'Mythical':
-      return 'text-[#ef4444]' // 红色系
+      return 'text-[#ef4444]' // 现代红
     default:
       return 'text-muted-foreground'
   }

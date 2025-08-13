@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <div className="container mx-auto px-6 py-8">
       <div className="mb-12 text-center">
-        <h1 className="text-6xl font-bold text-gradient mb-6 bg-gradient-to-r from-white via-blue-400 to-purple-500 bg-clip-text text-transparent">
+        <h1 className="text-5xl font-bold text-foreground mb-6">
           Blox Fruits Stock Monitor
         </h1>
         <p className="text-muted-foreground text-xl max-w-3xl mx-auto leading-relaxed">

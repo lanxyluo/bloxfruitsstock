@@ -98,13 +98,13 @@ export function StockOverview() {
           {hasActiveFilters && (
             <button 
               onClick={clearFilters}
-              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium bg-background/50 text-muted-foreground hover:text-white hover:bg-white/10 border border-border/40 transition-all duration-200"
+              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium bg-background text-muted-foreground hover:text-foreground hover:bg-secondary border border-border transition-colors duration-200"
             >
               <X className="w-4 h-4" />
               <span>Clear Filters</span>
             </button>
           )}
-          <button className="btn-secondary flex items-center space-x-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-blue-500/30">
+          <button className="btn-secondary flex items-center space-x-2">
             <RefreshCw className="w-4 h-4" />
             <span>Refresh</span>
           </button>

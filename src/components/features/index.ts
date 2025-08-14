@@ -6,3 +6,7 @@ export { default as StockStats } from './StockStats';
 // Re-export existing components
 export { StockOverview } from './StockOverview';
 export { MarketStats } from './MarketStats';
+
+// New advanced components
+export { AdvancedFilters } from './AdvancedFilters';
+export { FavoritesPanel } from './FavoritesPanel';

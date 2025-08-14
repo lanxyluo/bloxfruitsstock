@@ -4,229 +4,169 @@
 
 @layer base {
   :root {
-    /* Light theme variables (not used but defined for completeness) */
-    --background: 255 255 255;
-    --foreground: 0 0 0;
-    --card: 255 255 255;
-    --card-foreground: 0 0 0;
-    --popover: 255 255 255;
-    --popover-foreground: 0 0 0;
-    --primary: 59 130 246;
-    --primary-foreground: 255 255 255;
-    --secondary: 245 245 245;
-    --secondary-foreground: 0 0 0;
-    --muted: 245 245 245;
-    --muted-foreground: 115 115 115;
-    --accent: 245 245 245;
-    --accent-foreground: 0 0 0;
-    --destructive: 239 68 68;
-    --destructive-foreground: 255 255 255;
-    --border: 229 229 229;
-    --input: 229 229 229;
-    --ring: 59 130 246;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+    --success: 142.1 76.2% 36.3%;
+    --success-foreground: 355.7 100% 97.3%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 89%;
+    --info: 199 89% 48%;
+    --info-foreground: 210 40% 98%;
   }
 
   .dark {
-    /* Professional Modern Dark Gaming UI - VS Code Inspired */
-    --background: 15 20 25; /* #0f1419 - 极深的蓝黑色 */
-    --foreground: 255 255 255; /* #ffffff - 纯白色主文字 */
-    --card: 30 35 40; /* #1e2328 - 深灰蓝色卡片背景 */
-    --card-foreground: 255 255 255;
-    --popover: 30 35 40;
-    --popover-foreground: 255 255 255;
-    --primary: 59 130 246; /* #3b82f6 - 现代蓝色主色调 */
-    --primary-foreground: 255 255 255;
-    --secondary: 37 42 49; /* #252a31 - 稍亮的深色次要背景 */
-    --secondary-foreground: 255 255 255;
-    --muted: 37 42 49;
-    --muted-foreground: 168 179 207; /* #a8b3cf - 淡蓝灰色次要文字 */
-    --accent: 37 42 49;
-    --accent-foreground: 255 255 255;
-    --destructive: 239 68 68; /* #ef4444 - 红色 */
-    --destructive-foreground: 255 255 255;
-    --success: 34 197 94; /* #22c55e - 现代绿色 */
-    --success-foreground: 255 255 255;
-    --warning: 245 158 11; /* #f59e0b - 橙色警告 */
-    --warning-foreground: 255 255 255;
-    --border: 45 55 72; /* #2d3748 - 现代边框色 */
-    --input: 45 55 72;
-    --ring: 59 130 246;
-    --radius: 0.5rem; /* 8px 圆角 */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.1%;
+    --success: 142.1 70.6% 45.3%;
+    --success-foreground: 144.9 80.4% 10%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 89%;
+    --info: 199 89% 48%;
+    --info-foreground: 210 40% 98%;
   }
+}
 
+@layer base {
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    background-color: #0f1419 !important;
-    min-height: 100vh;
-  }
-
-  html {
-    @apply scroll-smooth;
-  }
-
-  /* Custom scrollbar for dark theme */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #0f1419;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: #2d3748;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: #4a5568;
+    @apply bg-background text-foreground;
   }
 }
 
 @layer components {
-  /* Professional Modern Card Component */
-  .card {
-    @apply bg-card text-card-foreground rounded-lg border shadow-sm;
-    background-color: #1e2328 !important;
-    border: 1px solid #2d3748 !important;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  }
-  
   .card-hover {
-    @apply transition-all duration-200 ease-out;
-  }
-  
-  .card-hover:hover {
-    @apply transform scale-[1.01];
-    border-color: rgba(59, 130, 246, 0.3) !important;
-    background-color: rgba(30, 35, 40, 0.95) !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  /* Professional Rarity Card Variants */
-  .card-common {
-    border-left: 3px solid #64748b !important;
-  }
-  
-  .card-rare {
-    border-left: 3px solid #3b82f6 !important;
-  }
-  
-  .card-epic {
-    border-left: 3px solid #8b5cf6 !important;
-  }
-  
-  .card-legendary {
-    border-left: 3px solid #f59e0b !important;
-  }
-  
-  .card-mythical {
-    border-left: 3px solid #ef4444 !important;
-  }
-  
-  /* Professional Button Components */
-  .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
-    background-color: #3b82f6 !important;
-  }
-  
-  .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
-    background-color: #252a31 !important;
-  }
-  
-  /* Professional Input Field */
-  .input-field {
-    @apply bg-background border border-input text-foreground placeholder-muted-foreground rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors duration-200;
-    background-color: #0f1419 !important;
-    border: 1px solid #2d3748 !important;
+    @apply transition-all duration-200 hover:shadow-md hover:scale-[1.02];
   }
 
-  /* Professional Glass Effect */
-  .glass-effect {
-    @apply backdrop-blur-sm bg-card/50 border border-border/50 rounded-lg;
-    background-color: rgba(30, 35, 40, 0.5) !important;
-    border: 1px solid rgba(45, 55, 72, 0.5) !important;
+  .highlight-animation {
+    animation: highlight 2s ease-in-out;
   }
-  
-  /* Professional Status Badges */
-  .status-badge {
-    @apply px-2 py-1 rounded text-xs font-medium transition-colors duration-200;
+
+  @keyframes highlight {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+    50% {
+      box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.3);
+    }
   }
-  
-  .status-in-stock {
-    background-color: rgba(34, 197, 94, 0.1) !important;
-    color: #22c55e !important;
-    border: 1px solid rgba(34, 197, 94, 0.2) !important;
+
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
   }
-  
-  .status-out-of-stock {
-    background-color: rgba(239, 68, 68, 0.1) !important;
-    color: #ef4444 !important;
-    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  
-  .status-low-stock {
-    background-color: rgba(245, 158, 11, 0.1) !important;
-    color: #f59e0b !important;
-    border: 1px solid rgba(245, 158, 11, 0.2) !important;
+
+  .slide-in-right {
+    animation: slideInRight 0.3s ease-out;
   }
-  
-  .status-coming-soon {
-    background-color: rgba(59, 130, 246, 0.1) !important;
-    color: #3b82f6 !important;
-    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
-  
-  /* Professional Rarity Badges */
-  .rarity-badge {
-    @apply px-2 py-1 rounded text-xs font-medium transition-colors duration-200;
+
+  .bounce-in {
+    animation: bounceIn 0.6s ease-out;
   }
-  
-  .rarity-common {
-    background-color: rgba(100, 116, 139, 0.1) !important;
-    color: #64748b !important;
-    border: 1px solid rgba(100, 116, 139, 0.2) !important;
-  }
-  
-  .rarity-rare {
-    background-color: rgba(59, 130, 246, 0.1) !important;
-    color: #3b82f6 !important;
-    border: 1px solid rgba(59, 130, 246, 0.2) !important;
-  }
-  
-  .rarity-epic {
-    background-color: rgba(139, 92, 246, 0.1) !important;
-    color: #8b5cf6 !important;
-    border: 1px solid rgba(139, 92, 246, 0.2) !important;
-  }
-  
-  .rarity-legendary {
-    background-color: rgba(245, 158, 11, 0.1) !important;
-    color: #f59e0b !important;
-    border: 1px solid rgba(245, 158, 11, 0.2) !important;
-  }
-  
-  .rarity-mythical {
-    background-color: rgba(239, 68, 68, 0.1) !important;
-    color: #ef4444 !important;
-    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent;
-  }
-  
   .text-balance {
     text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 

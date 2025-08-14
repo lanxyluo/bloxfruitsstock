@@ -9,6 +9,8 @@ interface StockGridProps {
   fruits: FruitItem[];
   loading?: boolean;
   onAddToCart?: (fruit: FruitItem) => void;
+  onToggleFavorite?: (fruit: FruitItem) => void;
+  getFavoriteStatus?: (fruitId: string) => boolean;
   className?: string;
 }
 
@@ -16,6 +18,8 @@ const StockGrid: React.FC<StockGridProps> = ({
   fruits, 
   loading = false, 
   onAddToCart, 
+  onToggleFavorite,
+  getFavoriteStatus,
   className 
 }) => {
   if (loading) {
@@ -51,6 +55,8 @@ const StockGrid: React.FC<StockGridProps> = ({
             key={fruit.id}
             fruit={fruit}
             onAddToCart={onAddToCart}
+            onToggleFavorite={onToggleFavorite}
+            isFavorite={getFavoriteStatus ? getFavoriteStatus(fruit.id) : false}
             className="h-full"
           />
         ))}

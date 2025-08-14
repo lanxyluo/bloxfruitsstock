@@ -3,17 +3,20 @@ import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { Button } from '@/components/ui/Button';
-import { ShoppingCart, Star, Package } from 'lucide-react';
+import { ShoppingCart, Star, Package, Heart } from 'lucide-react';
 import { FruitItem, RarityLevel } from '@/types';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 interface FruitCardProps {
   fruit: FruitItem;
   onAddToCart?: (fruit: FruitItem) => void;
+  onToggleFavorite?: (fruit: FruitItem) => void;
+  isFavorite?: boolean;
   className?: string;
 }
 
-const FruitCard: React.FC<FruitCardProps> = ({ fruit, onAddToCart, className }) => {
+const FruitCard: React.FC<FruitCardProps> = ({ fruit, onAddToCart, onToggleFavorite, isFavorite = false, className }) => {
   const getRarityColor = (rarity: RarityLevel): string => {
     switch (rarity) {
       case RarityLevel.COMMON: return 'border-gray-500/30';
@@ -53,6 +56,12 @@ const FruitCard: React.FC<FruitCardProps> = ({ fruit, onAddToCart, className }) 
     onAddToCart?.(fruit);
   };
 
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggleFavorite?.(fruit);
+  };
+
   return (
     <Link href={`/fruits/${fruit.id}`} className="block">
       <Card 
@@ -66,7 +75,7 @@ const FruitCard: React.FC<FruitCardProps> = ({ fruit, onAddToCart, className }) 
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Badge variant={fruit.rarity.toLowerCase() as any} size="sm">
+                <Badge variant={fruit.rarity.toLowerCase() as 'common' | 'rare' | 'epic' | 'legendary' | 'mythical'} size="sm">
                   {fruit.rarity}
                 </Badge>
                 <span className="text-xs text-muted-foreground">
@@ -90,10 +99,27 @@ const FruitCard: React.FC<FruitCardProps> = ({ fruit, onAddToCart, className }) 
 
         <CardContent className="relative space-y-4">
           {/* Fruit Icon Placeholder */}
-          <div className="flex justify-center">
+          <div className="flex justify-center relative">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center text-2xl">
               🍎
             </div>
+            
+            {/* Favorite Button */}
+            {onToggleFavorite && (
+              <button
+                onClick={handleToggleFavorite}
+                className={cn(
+                  "absolute -top-2 -right-2 p-1.5 rounded-full transition-all duration-200",
+                  "hover:scale-110 hover:shadow-lg",
+                  isFavorite
+                    ? "bg-red-500 text-white shadow-md"
+                    : "bg-white/20 text-white hover:bg-white/30"
+                )}
+                title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+              >
+                <Heart className={cn("w-4 h-4", isFavorite ? "fill-current" : "")} />
+              </button>
+            )}
           </div>
 
           {/* Description */}

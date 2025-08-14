@@ -12,12 +12,15 @@ import {
   SearchBar,
   FilterDropdown,
   Button,
-  Separator
+  Separator,
+  ToastContainer
 } from '@/components/ui'
 import { 
   FruitCard, 
   StockGrid, 
-  StockStats 
+  StockStats,
+  AdvancedFilters,
+  FavoritesPanel
 } from '@/components/features'
 import { 
   RefreshCw, 
@@ -30,11 +33,14 @@ import {
   DollarSign,
   Clock,
   Search,
-  X
+  X,
+  Heart,
+  Settings
 } from 'lucide-react'
 import { mockFruits } from '@/data/mockFruits'
-import { FruitItem, RarityLevel, StockStatus } from '@/types'
+import { FruitItem, RarityLevel, StockStatus, StockUpdate } from '@/types'
 import { cn } from '@/lib/utils'
+import { useStockUpdater, useNotifications, useFavorites, useAdvancedFilters } from '@/hooks'
 
 // Debounce hook for search optimization
 function useDebounce<T>(value: T, delay: number): T {
@@ -64,9 +70,86 @@ export default function HomePage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
+  
+  // Advanced features state
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
+  const [showFavorites, setShowFavorites] = useState(false)
+  const [activeTab, setActiveTab] = useState<'inventory' | 'favorites' | 'settings'>('inventory')
 
   // Debounced search query
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
+
+  // Advanced hooks
+  const {
+    data: realTimeFruits,
+    isRefreshing: isAutoRefreshing,
+    lastRefresh: autoLastRefresh,
+    nextRefresh,
+    networkStatus,
+    refresh: autoRefresh,
+    startAutoRefresh,
+    stopAutoRefresh,
+    updateConfig,
+    config
+  } = useStockUpdater({
+    initialData: mockFruits,
+    refreshInterval: 30000, // 30 seconds
+    enableAutoRefresh: true,
+    onDataUpdate: (updates: StockUpdate[]) => {
+      // Handle stock updates
+      console.log('Stock updates:', updates);
+    },
+    onError: (error: Error) => {
+      console.error('Stock update error:', error);
+    }
+  });
+
+  const {
+    notifications,
+    addNotification,
+    addStockChangeNotification,
+    removeNotification,
+    clearAllNotifications,
+    markAsRead,
+    markAllAsRead,
+    unreadCount
+  } = useNotifications({
+    maxNotifications: 10,
+    defaultDuration: 5000,
+    enableSound: true,
+    enableDesktopNotifications: true
+  });
+
+  const {
+    favorites,
+    addToFavorites,
+    removeFromFavorites,
+    isFavorite,
+    updateFavoriteNotes,
+    setPriceAlert,
+    removePriceAlert,
+    getPriceAlert,
+    clearAllFavorites,
+    exportFavorites,
+    importFavorites,
+    favoritesCount
+  } = useFavorites();
+
+  const {
+    filters: advancedFilters,
+    updateFilters: updateAdvancedFilters,
+    resetFilters: resetAdvancedFilters,
+    savedFilters,
+    saveCurrentFilter,
+    loadFilter,
+    deleteFilter,
+    setDefaultFilter,
+    exportFilters,
+    importFilters,
+    filteredItems: advancedFilteredItems,
+    activeFiltersCount,
+    hasActiveFilters
+  } = useAdvancedFilters(realTimeFruits);
 
   // Set initial time on client side to avoid hydration mismatch
   useEffect(() => {
@@ -202,7 +285,7 @@ export default function HomePage() {
   }, [])
 
   // Check if any filters are active
-  const hasActiveFilters = searchQuery || selectedRarity || selectedStatus || 
+  const hasBasicFilters = searchQuery || selectedRarity || selectedStatus || 
     priceRange.min > 0 || priceRange.max < 10000 || sortBy !== 'name' || sortDirection !== 'asc'
 
   return (
@@ -223,7 +306,7 @@ export default function HomePage() {
 
         {/* Statistics Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-          <Card className="card-hover p-4">
+          <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm font-medium">Total Items</p>
@@ -235,7 +318,7 @@ export default function HomePage() {
             </div>
           </Card>
 
-          <Card className="card-hover p-4">
+          <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm font-medium">In Stock</p>
@@ -247,7 +330,7 @@ export default function HomePage() {
             </div>
           </Card>
 
-          <Card className="card-hover p-4">
+          <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm font-medium">Low Stock</p>
@@ -259,7 +342,7 @@ export default function HomePage() {
             </div>
           </Card>
 
-          <Card className="card-hover p-4">
+          <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm font-medium">Out of Stock</p>
@@ -271,7 +354,7 @@ export default function HomePage() {
             </div>
           </Card>
 
-          <Card className="card-hover p-4">
+          <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm font-medium">Total Value</p>
@@ -282,6 +365,45 @@ export default function HomePage() {
               </div>
             </div>
           </Card>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-lg mb-6">
+          <button
+            onClick={() => setActiveTab('inventory')}
+            className={cn(
+              'px-4 py-2 rounded-md text-sm font-medium transition-colors',
+              activeTab === 'inventory'
+                ? 'bg-white text-primary shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            )}
+          >
+            Inventory
+          </button>
+          <button
+            onClick={() => setActiveTab('favorites')}
+            className={cn(
+              'px-4 py-2 rounded-md text-sm font-medium transition-colors',
+              activeTab === 'favorites'
+                ? 'bg-white text-primary shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            )}
+          >
+            <Heart className="w-4 h-4 mr-1 inline" />
+            Favorites ({favoritesCount})
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={cn(
+              'px-4 py-2 rounded-md text-sm font-medium transition-colors',
+              activeTab === 'settings'
+                ? 'bg-white text-primary shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            )}
+          >
+            <Settings className="w-4 h-4 mr-1 inline" />
+            Settings
+          </button>
         </div>
 
         {/* Search and Filter Section */}
@@ -299,7 +421,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
+                  variant="default"
                   size="sm"
                   onClick={handleRefresh}
                   disabled={isRefreshing}
@@ -308,17 +430,17 @@ export default function HomePage() {
                   <RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} />
                   {isRefreshing ? 'Refreshing...' : 'Refresh'}
                 </Button>
-                {hasActiveFilters && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="w-4 h-4" />
-                    Clear Filters
-                  </Button>
-                )}
+                            {hasBasicFilters && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearFilters}
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+              >
+                <X className="w-4 h-4" />
+                Clear Filters
+              </Button>
+            )}
               </div>
             </div>
           </CardHeader>
@@ -388,7 +510,7 @@ export default function HomePage() {
                     <option value="rarity">Rarity</option>
                   </select>
                   <Button
-                    variant="outline"
+                    variant="default"
                     size="sm"
                     onClick={() => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')}
                     className="px-2"
@@ -400,7 +522,7 @@ export default function HomePage() {
             </div>
 
             {/* Active Filters Display */}
-            {hasActiveFilters && (
+            {hasBasicFilters && (
               <div className="pt-4 border-t border-border">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm text-muted-foreground">Active filters:</span>
@@ -454,53 +576,215 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        {/* Results Summary */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold text-foreground">
-              Inventory Results
-            </h2>
-            <Badge variant="default">
-              {filteredAndSortedFruits.length} of {mockFruits.length} items
-            </Badge>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            {lastRefresh ? `Last updated: ${lastRefresh.toLocaleTimeString()}` : 'Loading...'}
-          </div>
-        </div>
+        {/* Content based on active tab */}
+        {activeTab === 'inventory' && (
+          <>
+            {/* Advanced Filters */}
+            <AdvancedFilters
+              filters={advancedFilters}
+              onFiltersChange={updateAdvancedFilters}
+              onSaveFilter={saveCurrentFilter}
+              onLoadFilter={loadFilter}
+              onDeleteFilter={deleteFilter}
+              onSetDefaultFilter={setDefaultFilter}
+              savedFilters={savedFilters}
+              onExportFilters={exportFilters}
+              onImportFilters={importFilters}
+              fruits={realTimeFruits}
+              className="mb-8"
+            />
 
-        {/* Stock Grid */}
-        <StockGrid
-          fruits={filteredAndSortedFruits}
-          onAddToCart={handleAddToCart}
-          className="mb-8"
-        />
+            {/* Results Summary */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Inventory Results
+                </h2>
+                <Badge variant="default">
+                  {filteredAndSortedFruits.length} of {realTimeFruits.length} items
+                </Badge>
+                {hasActiveFilters && (
+                  <Badge variant="default">
+                    Advanced filters: {activeFiltersCount}
+                  </Badge>
+                )}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {autoLastRefresh ? `Last updated: ${autoLastRefresh.toLocaleTimeString()}` : 'Loading...'}
+                {nextRefresh && (
+                  <span className="ml-2">• Next update: {nextRefresh.toLocaleTimeString()}</span>
+                )}
+              </div>
+            </div>
 
-        {/* Stock Statistics */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Detailed Statistics</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <StockStats fruits={mockFruits} />
-          </CardContent>
-        </Card>
+            {/* Stock Grid */}
+            <StockGrid
+              fruits={filteredAndSortedFruits}
+              onAddToCart={handleAddToCart}
+              onToggleFavorite={(fruit) => {
+                if (isFavorite(fruit.id)) {
+                  removeFromFavorites(fruit.id);
+                  addNotification({
+                    type: 'info',
+                    title: 'Removed from favorites',
+                    message: `${fruit.name} has been removed from your favorites.`,
+                    isRead: false
+                  });
+                } else {
+                  try {
+                    addToFavorites(fruit);
+                    addNotification({
+                      type: 'success',
+                      title: 'Added to favorites',
+                      message: `${fruit.name} has been added to your favorites!`,
+                      isRead: false
+                    });
+                  } catch (error) {
+                                          addNotification({
+                        type: 'error',
+                        title: 'Error',
+                        message: error instanceof Error ? error.message : 'Failed to add to favorites',
+                        isRead: false
+                      });
+                  }
+                }
+              }}
+              getFavoriteStatus={isFavorite}
+              className="mb-8"
+            />
+
+            {/* Stock Statistics */}
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>Detailed Statistics</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <StockStats fruits={realTimeFruits} />
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {activeTab === 'favorites' && (
+          <FavoritesPanel
+            favorites={favorites}
+            fruits={realTimeFruits}
+            onRemoveFavorite={removeFromFavorites}
+            onUpdateNotes={updateFavoriteNotes}
+            onSetPriceAlert={setPriceAlert}
+            onRemovePriceAlert={removePriceAlert}
+            onClearAll={clearAllFavorites}
+            onExport={exportFavorites}
+            onImport={importFavorites}
+            className="mb-8"
+          />
+        )}
+
+        {activeTab === 'settings' && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Settings & Configuration</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Auto-refresh Settings */}
+              <div className="space-y-3">
+                <h4 className="font-medium">Auto-refresh Settings</h4>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={config.autoRefresh}
+                      onChange={(e) => updateConfig({ autoRefresh: e.target.checked })}
+                      className="rounded border-gray-300"
+                    />
+                    Enable auto-refresh
+                  </label>
+                  <select
+                    value={config.refreshInterval / 1000}
+                    onChange={(e) => updateConfig({ refreshInterval: parseInt(e.target.value) * 1000 })}
+                    className="px-3 py-2 border border-gray-300 rounded-md"
+                  >
+                    <option value={15}>15 seconds</option>
+                    <option value={30}>30 seconds</option>
+                    <option value={60}>1 minute</option>
+                    <option value={300}>5 minutes</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Notification Settings */}
+              <div className="space-y-3">
+                <h4 className="font-medium">Notification Settings</h4>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={config.enableNotifications}
+                      onChange={(e) => updateConfig({ enableNotifications: e.target.checked })}
+                      className="rounded border-gray-300"
+                    />
+                    Enable notifications
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={config.enableSound}
+                      onChange={(e) => updateConfig({ enableSound: e.target.checked })}
+                      className="rounded border-gray-300"
+                    />
+                    Enable sound alerts
+                  </label>
+                </div>
+              </div>
+
+              {/* Network Status */}
+              <div className="space-y-3">
+                <h4 className="font-medium">Network Status</h4>
+                <div className="flex items-center gap-2">
+                  <div className={cn(
+                    "w-2 h-2 rounded-full",
+                    networkStatus.isOnline ? "bg-green-500" : "bg-red-500"
+                  )} />
+                  <span className="text-sm">
+                    {networkStatus.isOnline ? 'Online' : 'Offline'}
+                  </span>
+                  {networkStatus.retryCount > 0 && (
+                    <span className="text-sm text-gray-500">
+                      • Retry count: {networkStatus.retryCount}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Auto-refresh Status */}
         <div className="text-center py-4 border-t border-border">
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <div className={cn(
               "w-2 h-2 rounded-full",
-              isRefreshing ? "bg-yellow-500 animate-pulse" : "bg-green-500"
+              isAutoRefreshing ? "bg-yellow-500 animate-pulse" : "bg-green-500"
             )} />
             <span>
-              {isRefreshing ? 'Refreshing data...' : 'Data is up to date'}
+              {isAutoRefreshing ? 'Refreshing data...' : 'Data is up to date'}
             </span>
             <span>•</span>
-            <span>Auto-refresh every 5 minutes</span>
+            <span>Auto-refresh every {config.refreshInterval / 1000} seconds</span>
+            {!config.autoRefresh && (
+              <span>• Auto-refresh disabled</span>
+            )}
           </div>
         </div>
       </main>
+
+      {/* Toast Notifications */}
+      <ToastContainer
+        notifications={notifications}
+        onRemove={removeNotification}
+        onAction={(action) => action?.onClick?.()}
+        position="top-right"
+      />
     </div>
   )
 }

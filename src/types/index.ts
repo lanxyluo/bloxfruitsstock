@@ -148,3 +148,127 @@ export type StatusColor = {
     background: string;
   };
 };
+
+// Notification System Types
+export interface Notification {
+  id: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+  title: string;
+  message: string;
+  timestamp: Date;
+  duration?: number;
+  isRead: boolean;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
+}
+
+export interface StockChangeNotification extends Notification {
+  fruitId: string;
+  fruitName: string;
+  changeType: 'stock_increase' | 'stock_decrease' | 'price_change' | 'status_change';
+  oldValue: any;
+  newValue: any;
+}
+
+// Favorites System Types
+export interface FavoriteItem {
+  id: string;
+  fruitId: string;
+  fruitName: string;
+  addedAt: Date;
+  notes?: string;
+  priceAlert?: number;
+}
+
+// Stock History Types
+export interface StockHistoryEntry {
+  id: string;
+  fruitId: string;
+  fruitName: string;
+  timestamp: Date;
+  stock: number;
+  price: number;
+  status: StockStatus;
+  changeType: 'stock_update' | 'price_update' | 'status_update';
+}
+
+// Price Trend Types
+export interface PriceTrend {
+  fruitId: string;
+  fruitName: string;
+  data: Array<{
+    timestamp: Date;
+    price: number;
+    stock: number;
+  }>;
+  trend: 'up' | 'down' | 'stable';
+  changePercentage: number;
+  period: '1h' | '24h' | '7d' | '30d';
+}
+
+// Advanced Filter Types
+export interface AdvancedFilters {
+  priceRange: [number, number];
+  rarities: RarityLevel[];
+  statuses: StockStatus[];
+  categories: string[];
+  tradeable: boolean | null;
+  demand: string[];
+  supply: string[];
+  customFilters: {
+    [key: string]: any;
+  };
+}
+
+export interface SavedFilter {
+  id: string;
+  name: string;
+  filters: AdvancedFilters;
+  createdAt: Date;
+  isDefault: boolean;
+}
+
+// Performance and Cache Types
+export interface CacheEntry<T> {
+  data: T;
+  timestamp: Date;
+  ttl: number;
+}
+
+export interface VirtualScrollConfig {
+  itemHeight: number;
+  overscan: number;
+  containerHeight: number;
+}
+
+// Error Handling Types
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+  errorInfo?: any;
+}
+
+export interface NetworkStatus {
+  isOnline: boolean;
+  lastSeen: Date;
+  retryCount: number;
+  maxRetries: number;
+}
+
+// Real-time Update Types
+export interface StockUpdate {
+  fruitId: string;
+  changes: Partial<FruitItem>;
+  timestamp: Date;
+  source: 'api' | 'websocket' | 'manual';
+}
+
+export interface UpdateConfig {
+  autoRefresh: boolean;
+  refreshInterval: number; // in milliseconds
+  enableNotifications: boolean;
+  enableSound: boolean;
+  retryOnFailure: boolean;
+}

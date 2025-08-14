@@ -21,15 +21,15 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6">
+    <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto">
-        {/* 简单导航 - 使用英文文本，避免任何组件导入 */}
-        <nav className="mb-8 bg-white rounded-lg shadow-sm p-4">
+        {/* 导航栏 */}
+        <nav className="mb-8 bg-card rounded-lg shadow-sm p-4 border">
           <div className="flex items-center space-x-4 mb-4">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">BF</span>
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">BF</span>
             </div>
-            <span className="text-xl font-bold text-gray-900">Blox Fruits Stock</span>
+            <span className="text-xl font-bold text-foreground">Blox Fruits Stock</span>
           </div>
           <div className="flex space-x-6">
             <Link href="/" className="text-primary font-medium border-b-2 border-primary pb-2">
@@ -48,74 +48,74 @@ export default function DashboardPage() {
         </nav>
 
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Blox Fruits Stock Monitor
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Real-time monitoring of Blox Fruits stock availability and market trends. 
             Track item availability and get your maximum price instantly.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-white shadow-lg border-0">
+          <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-gray-700">
-                <Package className="h-5 w-5 text-blue-600" />
+              <CardTitle className="flex items-center gap-2 text-muted-foreground">
+                <Package className="h-5 w-5 text-primary" />
                 Total Items
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-gray-900">{stats.totalItems}</p>
+              <p className="text-3xl font-bold text-foreground">{stats.totalItems}</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white shadow-lg border-0">
+          <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-gray-700">
-                <TrendingUp className="h-5 w-5 text-green-600" />
+              <CardTitle className="flex items-center gap-2 text-muted-foreground">
+                <TrendingUp className="h-5 w-5 text-success" />
                 In Stock
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-green-600">{stats.inStock}</p>
+              <p className="text-3xl font-bold text-success">{stats.inStock}</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white shadow-lg border-0">
+          <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-gray-700">
-                <Clock className="h-5 w-5 text-gray-600" />
+              <CardTitle className="flex items-center gap-2 text-muted-foreground">
+                <Clock className="h-5 w-5 text-warning" />
                 Low Stock
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-gray-600">{stats.lowStock}</p>
+              <p className="text-3xl font-bold text-warning">{stats.lowStock}</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white shadow-lg border-0">
+          <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-gray-700">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
+              <CardTitle className="flex items-center gap-2 text-muted-foreground">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
                 Out of Stock
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-red-600">{stats.outOfStock}</p>
+              <p className="text-3xl font-bold text-destructive">{stats.outOfStock}</p>
             </CardContent>
           </Card>
         </div>
 
-        <Card className="bg-white shadow-lg border-0">
+        <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-gray-700">
-              <DollarSign className="h-6 w-6 text-green-600" />
+            <CardTitle className="flex items-center gap-2 text-muted-foreground">
+              <DollarSign className="h-6 w-6 text-success" />
               Total Value
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-green-600">${stats.totalValue.toLocaleString()}</p>
+            <p className="text-4xl font-bold text-success">${stats.totalValue.toLocaleString()}</p>
           </CardContent>
         </Card>
 

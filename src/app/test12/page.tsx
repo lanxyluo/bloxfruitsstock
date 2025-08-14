@@ -1,3 +1,8 @@
+'use client'
+
+import React from 'react'
+import Link from 'next/link'
+
 export default function Test12Page() {
   return (
     <div style={{ 
@@ -19,7 +24,7 @@ export default function Test12Page() {
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <a href="/" style={{ 
+              <Link href="/" style={{ 
                 padding: '8px 12px', 
                 color: '#3b82f6', 
                 textDecoration: 'none',
@@ -28,31 +33,31 @@ export default function Test12Page() {
                 border: '1px solid rgba(59, 130, 246, 0.2)'
               }}>
                 Dashboard
-              </a>
-              <a href="/stock-overview" style={{ 
+              </Link>
+              <Link href="/stock-overview" style={{ 
                 padding: '8px 12px', 
                 color: '#d1d5db', 
                 textDecoration: 'none',
                 borderRadius: '6px'
               }}>
                 Stock Overview
-              </a>
-              <a href="/all-items" style={{ 
+              </Link>
+              <Link href="/all-items" style={{ 
                 padding: '8px 12px', 
                 color: '#d1d5db', 
                 textDecoration: 'none',
                 borderRadius: '6px'
               }}>
                 All Items
-              </a>
-              <a href="/market-analysis" style={{ 
+              </Link>
+              <Link href="/market-analysis" style={{ 
                 padding: '8px 12px', 
                 color: '#d1d5db', 
                 textDecoration: 'none',
                 borderRadius: '6px'
               }}>
                 Market Analysis
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -132,7 +137,7 @@ export default function Test12Page() {
           padding: '20px', 
           backgroundColor: '#374151', 
           borderRadius: '8px',
-          border: '1px solid '#4b5563'
+          border: '1px solid #4b5563'
         }}>
           <h2 style={{ color: '#fbbf24', marginBottom: '16px' }}>Debug Information:</h2>
           <div style={{ color: '#d1d5db' }}>

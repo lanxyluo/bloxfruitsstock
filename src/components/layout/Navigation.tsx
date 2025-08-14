@@ -18,7 +18,7 @@ export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <nav className="bg-card/50 backdrop-blur-sm border-b border-border sticky top-0 z-50">
+    <nav className="bg-card/50 backdrop-blur-sm border-b border-border sticky top-0 z-[100]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}

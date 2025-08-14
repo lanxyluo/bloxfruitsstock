@@ -308,7 +308,7 @@ export function FavoritesPanel({
 
       {/* Price Alert Dialog */}
       {showPriceAlertDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[90]">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold mb-4">Set Price Alert</h3>
             <div className="space-y-4">
@@ -348,7 +348,7 @@ export function FavoritesPanel({
 
       {/* Import Dialog */}
       {showImportDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[90]">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold mb-4">Import Favorites</h3>
             <div className="space-y-4">

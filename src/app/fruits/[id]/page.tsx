@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { mockFruits } from '@/data/mockFruits';
-import { Fruit } from '@/types/fruit';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { FruitItem } from '@/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Separator } from '@/components/ui/Separator';
 import { ArrowLeft, Package, DollarSign, Scale, Calendar, Star } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -15,7 +15,7 @@ import { notFound } from 'next/navigation';
 export default function FruitDetailPage() {
   const params = useParams();
   const fruitId = params.id as string;
-  const [fruit, setFruit] = useState<Fruit | null>(null);
+  const [fruit, setFruit] = useState<FruitItem | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -142,8 +142,8 @@ export default function FruitDetailPage() {
             <div className="flex items-center gap-3 p-4 rounded-lg bg-card/50 border border-border">
               <Scale className="w-5 h-5 text-muted-foreground" />
               <div>
-                <div className="text-sm text-muted-foreground">重量</div>
-                <div className="text-lg font-semibold text-white">{fruit.weight}g</div>
+                <div className="text-sm text-muted-foreground">需求</div>
+                <div className="text-lg font-semibold text-white">{fruit.demand}</div>
               </div>
             </div>
             <div className="flex items-center gap-3 p-4 rounded-lg bg-card/50 border border-border">
@@ -196,8 +196,8 @@ export default function FruitDetailPage() {
                   <span className="text-white font-semibold">{fruit.stock}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">重量</span>
-                  <span className="text-white font-semibold">{fruit.weight}g</span>
+                  <span className="text-muted-foreground">供应</span>
+                  <span className="text-white font-semibold">{fruit.supply}</span>
                 </div>
               </div>
             </div>

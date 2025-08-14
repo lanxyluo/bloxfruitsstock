@@ -206,8 +206,8 @@ export default function FruitsPage() {
                     <span className="text-white font-semibold">{fruit.stock}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-sm">重量:</span>
-                    <span className="text-white font-semibold">{fruit.weight}g</span>
+                    <span className="text-muted-foreground text-sm">需求:</span>
+                    <span className="text-white font-semibold">{fruit.demand}</span>
                   </div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-border">
@@ -243,7 +243,7 @@ export default function FruitsPage() {
                     <div className="flex items-center gap-6 text-sm">
                       <span className="text-muted-foreground">价格: <span className="text-white font-semibold">${fruit.price}</span></span>
                       <span className="text-muted-foreground">库存: <span className="text-white font-semibold">{fruit.stock}</span></span>
-                      <span className="text-muted-foreground">重量: <span className="text-white font-semibold">{fruit.weight}g</span></span>
+                      <span className="text-muted-foreground">供应: <span className="text-white font-semibold">{fruit.supply}</span></span>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">

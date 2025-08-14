@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { TrendingUp, TrendingDown, Package, DollarSign, Star, AlertTriangle } from 'lucide-react';
-import { FruitItem, RarityLevel } from '@/types';
+import { FruitItem, RarityLevel, StockStatus } from '@/types';
 
 interface StockStatsProps {
   fruits: FruitItem[];
@@ -15,10 +15,10 @@ const StockStats: React.FC<StockStatsProps> = ({ fruits, className }) => {
   const totalStock = fruits.reduce((sum, fruit) => sum + fruit.stock, 0);
   const totalValue = fruits.reduce((sum, fruit) => sum + (fruit.price * fruit.stock), 0);
   
-  const inStockCount = fruits.filter(fruit => fruit.status === 'in-stock').length;
-  const lowStockCount = fruits.filter(fruit => fruit.status === 'low-stock').length;
-  const outOfStockCount = fruits.filter(fruit => fruit.status === 'out-of-stock').length;
-  const comingSoonCount = fruits.filter(fruit => fruit.status === 'coming-soon').length;
+  const inStockCount = fruits.filter(fruit => fruit.status === StockStatus.IN_STOCK).length;
+  const lowStockCount = fruits.filter(fruit => fruit.status === StockStatus.LOW_STOCK).length;
+  const outOfStockCount = fruits.filter(fruit => fruit.status === StockStatus.OUT_OF_STOCK).length;
+  const comingSoonCount = fruits.filter(fruit => fruit.status === StockStatus.COMING_SOON).length;
   
   const rarityCounts = {
     [RarityLevel.COMMON]: fruits.filter(fruit => fruit.rarity === RarityLevel.COMMON).length,

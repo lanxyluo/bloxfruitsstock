@@ -63,34 +63,39 @@ export default function HomePage() {
   const [sortBy, setSortBy] = useState<'name' | 'price' | 'stock' | 'rarity'>('name')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
 
   // Debounced search query
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
+  // Set initial time on client side to avoid hydration mismatch
+  useEffect(() => {
+    setLastRefresh(new Date())
+  }, [])
+
   // Filter options
   const rarityOptions = useMemo(() => [
-    { value: 'common', label: 'Common', count: mockFruits.filter(f => f.rarity === RarityLevel.COMMON).length },
-    { value: 'rare', label: 'Rare', count: mockFruits.filter(f => f.rarity === RarityLevel.RARE).length },
-    { value: 'epic', label: 'Epic', count: mockFruits.filter(f => f.rarity === RarityLevel.EPIC).length },
-    { value: 'legendary', label: 'Legendary', count: mockFruits.filter(f => f.rarity === RarityLevel.LEGENDARY).length },
-    { value: 'mythical', label: 'Mythical', count: mockFruits.filter(f => f.rarity === RarityLevel.MYTHICAL).length }
+    { value: RarityLevel.COMMON, label: 'Common', count: mockFruits.filter(f => f.rarity === RarityLevel.COMMON).length },
+    { value: RarityLevel.RARE, label: 'Rare', count: mockFruits.filter(f => f.rarity === RarityLevel.RARE).length },
+    { value: RarityLevel.EPIC, label: 'Epic', count: mockFruits.filter(f => f.rarity === RarityLevel.EPIC).length },
+    { value: RarityLevel.LEGENDARY, label: 'Legendary', count: mockFruits.filter(f => f.rarity === RarityLevel.LEGENDARY).length },
+    { value: RarityLevel.MYTHICAL, label: 'Mythical', count: mockFruits.filter(f => f.rarity === RarityLevel.MYTHICAL).length }
   ], [])
 
   const statusOptions = useMemo(() => [
-    { value: 'in-stock', label: 'In Stock', count: mockFruits.filter(f => f.status === StockStatus.IN_STOCK).length },
-    { value: 'low-stock', label: 'Low Stock', count: mockFruits.filter(f => f.status === StockStatus.LOW_STOCK).length },
-    { value: 'out-of-stock', label: 'Out of Stock', count: mockFruits.filter(f => f.status === StockStatus.OUT_OF_STOCK).length },
-    { value: 'coming-soon', label: 'Coming Soon', count: mockFruits.filter(f => f.status === StockStatus.COMING_SOON).length }
+    { value: StockStatus.IN_STOCK, label: 'In Stock', count: mockFruits.filter(f => f.status === StockStatus.IN_STOCK).length },
+    { value: StockStatus.LOW_STOCK, label: 'Low Stock', count: mockFruits.filter(f => f.status === StockStatus.LOW_STOCK).length },
+    { value: StockStatus.OUT_OF_STOCK, label: 'Out of Stock', count: mockFruits.filter(f => f.status === StockStatus.OUT_OF_STOCK).length },
+    { value: StockStatus.COMING_SOON, label: 'Coming Soon', count: mockFruits.filter(f => f.status === StockStatus.COMING_SOON).length }
   ], [])
 
   // Calculate statistics
   const stats = useMemo(() => {
-    const totalFruits = fruits.length
-    const inStockCount = fruits.filter(fruit => fruit.status === StockStatus.IN_STOCK).length
-    const outOfStockCount = fruits.filter(fruit => fruit.status === StockStatus.OUT_OF_STOCK).length
-    const lowStockCount = fruits.filter(fruit => fruit.status === StockStatus.LOW_STOCK).length
-    const totalValue = fruits.reduce((sum, fruit) => sum + (fruit.price * fruit.stock), 0)
+    const totalFruits = mockFruits.length
+    const inStockCount = mockFruits.filter(fruit => fruit.status === StockStatus.IN_STOCK).length
+    const outOfStockCount = mockFruits.filter(fruit => fruit.status === StockStatus.OUT_OF_STOCK).length
+    const lowStockCount = mockFruits.filter(fruit => fruit.status === StockStatus.LOW_STOCK).length
+    const totalValue = mockFruits.reduce((sum, fruit) => sum + (fruit.price * fruit.stock), 0)
 
     return {
       totalFruits,
@@ -99,7 +104,7 @@ export default function HomePage() {
       lowStockCount,
       totalValue
     }
-  }, [fruits])
+  }, [])
 
   // Filter and sort fruits
   const filteredAndSortedFruits = useMemo(() => {
@@ -115,7 +120,7 @@ export default function HomePage() {
 
     // Apply rarity filter
     if (selectedRarity) {
-      filtered = filtered.filter(fruit => fruit.rarity.toLowerCase() === selectedRarity)
+      filtered = filtered.filter(fruit => fruit.rarity === selectedRarity)
     }
 
     // Apply status filter
@@ -460,7 +465,7 @@ export default function HomePage() {
             </Badge>
           </div>
           <div className="text-sm text-muted-foreground">
-            Last updated: {lastRefresh.toLocaleTimeString()}
+            {lastRefresh ? `Last updated: ${lastRefresh.toLocaleTimeString()}` : 'Loading...'}
           </div>
         </div>
 
@@ -477,7 +482,7 @@ export default function HomePage() {
             <CardTitle>Detailed Statistics</CardTitle>
           </CardHeader>
           <CardContent>
-            <StockStats fruits={filteredAndSortedFruits} />
+            <StockStats fruits={mockFruits} />
           </CardContent>
         </Card>
 

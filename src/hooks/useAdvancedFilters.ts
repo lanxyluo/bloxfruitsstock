@@ -71,7 +71,7 @@ export function useAdvancedFilters(
 
   // Save filters to localStorage whenever they change
   useEffect(() => {
-    if (enableLocalStorage) {
+    if (enableLocalStorage && savedFilters.length > 0) {
       try {
         localStorage.setItem(SAVED_FILTERS_STORAGE_KEY, JSON.stringify(savedFilters));
       } catch (error) {

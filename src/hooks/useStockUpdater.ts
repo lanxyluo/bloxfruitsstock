@@ -33,25 +33,52 @@ export function useStockUpdater({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
   const [nextRefresh, setNextRefresh] = useState<Date | null>(null);
-  const [config, setConfig] = useState<UpdateConfig>({
+  const [config, setConfig] = useState<UpdateConfig>(() => ({
+    autoRefresh: enableAutoRefresh,
+    refreshInterval,
+    enableNotifications: true,
+    enableSound: false,
+    retryOnFailure: true
+  }));
+
+  const [networkStatus, setNetworkStatus] = useState<NetworkStatus>(() => ({
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+    lastSeen: new Date(),
+    retryCount: 0,
+    maxRetries: 3
+  }));
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const dataRef = useRef<FruitItem[]>(initialData);
+  const configRef = useRef<UpdateConfig>({
     autoRefresh: enableAutoRefresh,
     refreshInterval,
     enableNotifications: true,
     enableSound: false,
     retryOnFailure: true
   });
-
-  const [networkStatus, setNetworkStatus] = useState<NetworkStatus>({
-    isOnline: navigator.onLine,
+  const networkStatusRef = useRef<NetworkStatus>({
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     lastSeen: new Date(),
     retryCount: 0,
     maxRetries: 3
   });
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  // Keep refs in sync with state
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
-  // Simulate API call for demo purposes
+  useEffect(() => {
+    configRef.current = config;
+  }, [config]);
+
+  useEffect(() => {
+    networkStatusRef.current = networkStatus;
+  }, [networkStatus]);
+
+  // Simulate API call for demo purposes - stable function reference
   const fetchStockData = useCallback(async (): Promise<FruitItem[]> => {
     // In a real app, this would be an actual API call
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
@@ -73,7 +100,7 @@ export function useStockUpdater({
     });
   }, [initialData]);
 
-  // Detect stock changes and create updates
+  // Detect stock changes and create updates - stable function reference
   const detectChanges = useCallback((oldData: FruitItem[], newData: FruitItem[]): StockUpdate[] => {
     const updates: StockUpdate[] = [];
     
@@ -112,9 +139,12 @@ export function useStockUpdater({
     return updates;
   }, []);
 
-  // Main refresh function
+  // Main refresh function - stable function reference with proper error handling
   const refresh = useCallback(async () => {
-    if (isRefreshing) return;
+    // Use refs to check current state without dependencies
+    if (isRefreshing || networkStatusRef.current.retryCount >= networkStatusRef.current.maxRetries) {
+      return;
+    }
 
     setIsRefreshing(true);
     setNetworkStatus(prev => ({ ...prev, retryCount: 0 }));
@@ -128,13 +158,13 @@ export function useStockUpdater({
       abortControllerRef.current = new AbortController();
       const newData = await fetchStockData();
       
-      // Detect changes
-      const updates = detectChanges(data, newData);
+      // Detect changes using refs to avoid dependency issues
+      const updates = detectChanges(dataRef.current, newData);
       
       // Update data
       setData(newData);
       setLastRefresh(new Date());
-      setNextRefresh(new Date(Date.now() + config.refreshInterval));
+      setNextRefresh(new Date(Date.now() + configRef.current.refreshInterval));
       
       // Notify about updates
       if (updates.length > 0 && onDataUpdate) {
@@ -155,26 +185,30 @@ export function useStockUpdater({
         onError(error as Error);
       }
 
-      // Handle retry logic
-      if (config.retryOnFailure && networkStatus.retryCount < networkStatus.maxRetries) {
+      // Handle retry logic - use refs to avoid dependency issues
+      const currentRetryCount = networkStatusRef.current.retryCount;
+      const maxRetries = networkStatusRef.current.maxRetries;
+      
+      if (configRef.current.retryOnFailure && currentRetryCount < maxRetries) {
         setNetworkStatus(prev => ({ 
           ...prev, 
           retryCount: prev.retryCount + 1 
         }));
         
-        // Retry after a delay
+        // Retry after a delay - use setTimeout to avoid immediate recursion
         setTimeout(() => {
-          if (config.autoRefresh) {
+          // Check if we should still retry (avoid race conditions)
+          if (configRef.current.autoRefresh && !isRefreshing) {
             refresh();
           }
-        }, 5000 * (networkStatus.retryCount + 1)); // Exponential backoff
+        }, 5000 * (currentRetryCount + 1)); // Exponential backoff
       }
     } finally {
       setIsRefreshing(false);
     }
-  }, [isRefreshing, data, config, networkStatus, fetchStockData, detectChanges, onDataUpdate, onError]);
+  }, [fetchStockData, detectChanges, onDataUpdate, onError]); // Remove isRefreshing dependency
 
-  // Start auto-refresh
+  // Start auto-refresh - stable function reference
   const startAutoRefresh = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -183,16 +217,17 @@ export function useStockUpdater({
     setConfig(prev => ({ ...prev, autoRefresh: true }));
     
     intervalRef.current = setInterval(() => {
-      if (config.autoRefresh) {
+      // Use refs to check current state without dependencies
+      if (configRef.current.autoRefresh && !isRefreshing) {
         refresh();
       }
-    }, config.refreshInterval);
+    }, configRef.current.refreshInterval);
 
     // Set next refresh time
-    setNextRefresh(new Date(Date.now() + config.refreshInterval));
-  }, [config.autoRefresh, config.refreshInterval, refresh]);
+    setNextRefresh(new Date(Date.now() + configRef.current.refreshInterval));
+  }, [refresh]); // Remove isRefreshing dependency
 
-  // Stop auto-refresh
+  // Stop auto-refresh - stable function reference
   const stopAutoRefresh = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -203,7 +238,7 @@ export function useStockUpdater({
     setNextRefresh(null);
   }, []);
 
-  // Update configuration
+  // Update configuration - stable function reference
   const updateConfig = useCallback((newConfig: Partial<UpdateConfig>) => {
     setConfig(prev => {
       const updated = { ...prev, ...newConfig };
@@ -213,7 +248,8 @@ export function useStockUpdater({
         clearInterval(intervalRef.current);
         if (updated.autoRefresh) {
           intervalRef.current = setInterval(() => {
-            if (updated.autoRefresh) {
+            // Use refs to check current state without dependencies
+            if (updated.autoRefresh && !isRefreshing) {
               refresh();
             }
           }, updated.refreshInterval);
@@ -222,9 +258,9 @@ export function useStockUpdater({
       
       return updated;
     });
-  }, [refresh]);
+  }, [refresh]); // Remove isRefreshing dependency
 
-  // Network status monitoring
+  // Network status monitoring - stable function reference
   useEffect(() => {
     const handleOnline = () => {
       setNetworkStatus(prev => ({ 
@@ -233,8 +269,8 @@ export function useStockUpdater({
         lastSeen: new Date() 
       }));
       
-      // Refresh data when coming back online
-      if (config.autoRefresh) {
+      // Refresh data when coming back online - use refs to avoid dependencies
+      if (configRef.current.autoRefresh && !isRefreshing) {
         refresh();
       }
     };
@@ -254,9 +290,9 @@ export function useStockUpdater({
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [config.autoRefresh, refresh]);
+  }, [refresh]); // Remove isRefreshing dependency
 
-  // Auto-refresh setup
+  // Auto-refresh setup - stable dependencies
   useEffect(() => {
     if (config.autoRefresh) {
       startAutoRefresh();
@@ -271,12 +307,12 @@ export function useStockUpdater({
     };
   }, [config.autoRefresh, startAutoRefresh, stopAutoRefresh]);
 
-  // Initial refresh
+  // Initial refresh - stable dependencies
   useEffect(() => {
     if (enableAutoRefresh) {
       refresh();
     }
-  }, []); // Only run once on mount
+  }, [enableAutoRefresh, refresh]); // Remove isRefreshing dependency
 
   return {
     data,

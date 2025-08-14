@@ -52,7 +52,7 @@ export function useFavorites({
 
   // Save favorites to localStorage whenever they change
   useEffect(() => {
-    if (enableLocalStorage) {
+    if (enableLocalStorage && favorites.length > 0) {
       try {
         localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
       } catch (error) {

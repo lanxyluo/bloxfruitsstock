@@ -153,8 +153,11 @@ export default function HomePage() {
 
   // Set initial time on client side to avoid hydration mismatch
   useEffect(() => {
-    setLastRefresh(new Date())
-  }, [])
+    // Only set if not already set to avoid unnecessary updates
+    if (!lastRefresh) {
+      setLastRefresh(new Date())
+    }
+  }, []) // Remove lastRefresh dependency to avoid loop
 
   // Filter options
   const rarityOptions = useMemo(() => [
